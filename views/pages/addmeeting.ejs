@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/header.ejs %>
+  <link rel="stylesheet" type="text/css" href="/css/main.css" />
+</head>
+  <body>
+  <% include ../partials/nav.ejs %>
+    <div class="container">
+      <div class="starter-template">
+        <h1>Create new Meetings</h1>
+         <p class="lead">Use the form below to create new meetings with your own specifications</p>
+      </div>
+      <form class=form-add-meeting id="addMeetingForm" action="/meetings" method="post">
+        <div class="form-group">
+          <label for="meetingName">Meeting Name</label>
+          <input type="Text" class="form-control" id="meetingName" name="meetingName" placeholder="Enter Meeting Name" required>
+          <!--<small class="form-text text-muted">This name will be displayed on te overview page</small>-->
+            <hr>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="checkbox" class="form-check-input" name="audioOnly">
+                Audio only?
+              </label>
+            </div>
+        </div>
+         <button type="submit" class="btn btn-primary">Create Meeting</button>
+      </form> 
+    </div><!-- /.container -->
+    <% include ../partials/footer.ejs %>
+    </body>
+</html>

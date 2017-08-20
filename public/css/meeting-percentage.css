@@ -1,0 +1,90 @@
+.full-height-wrapper{
+	min-height: 100vh;
+	max-height: 100vh;
+	width: 100%;
+	background-color: yellow;
+}
+
+.percentage-nav{
+	min-height: 8vh;
+	/*background-color: red;*/
+}
+
+.percentage-main-body{
+	height:80vh;
+	/*background-color: green;*/
+}
+
+.percentage-footer{
+	height:10vh;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #D3D3D3;
+  text-align: center;
+  /*padding: 0.5rem;*/
+}
+
+.bordered{
+	border: 1px solid black;
+}
+
+.full-height{
+	min-height: 100%;
+}
+
+.left-panel{
+	float: left;
+	width: 30%;
+	background-color: #ADD8E6;
+	align-items: stretch;
+	padding: 0.5em;
+}
+
+.right-panel{
+	float: left;
+	width: 70%;
+	background-color: #9bc2cf;
+	align-items: stretch;
+}
+
+.display-flex{
+	display: flex;
+}
+
+.Aligner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Old Streambox CSS */
+.small-stream-username{
+  text-align: center;
+}
+
+.big-stream-username{
+  text-align: center;
+}
+
+.small-stream-container{
+  border: 1px solid #999;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.big-stream-container{
+  border: 2px solid #999;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.small-stream-box{
+  padding: 0.25rem;
+  width: 100%;
+}
+

@@ -1,0 +1,101 @@
+body {
+  padding-top: 5rem;
+}
+
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+
+.bordered{
+	/*min-height: 200px;*/
+	border: 1px solid black;
+}
+
+.fill { 
+    height: 100%;
+}
+
+.fill80{
+  height: 80%;
+}
+
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 80px;
+  background-color: #f5f5f5;
+  text-align: center;
+  /*padding: 0.5rem;*/
+}
+
+.Aligner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.small-stream-username{
+  text-align: center;
+}
+
+.big-stream-username{
+  text-align: center;
+}
+
+.small-stream-container{
+  border: 1px solid #999;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.big-stream-container{
+  border: 2px solid #999;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.small-stream-box{
+  padding: 0.25rem;
+}
+
+.max-page-high{
+  max-height: calc(100vh - 200px);
+}
+
+
+
+@media (max-width: 768px) {
+   .max-page-high {
+        max-height: calc(100vh - 300px);
+    }
+}
+
+.scroll{
+  display: flex;
+  flex-direction: column; 
+}
+
+.scrollable-content{
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1; /* added */
+}
+
+@media (max-width: 768px) {
+    .btn,.btn-group {
+        width:100%;
+    }
+}

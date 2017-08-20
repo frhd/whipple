@@ -1,0 +1,238 @@
+#header{
+    /*background-color: Orange*/;
+    height: 65px;
+}
+
+html{
+    height: 100%;
+}
+
+body{
+    height: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    background: linear-gradient(to  bottom right, #19547b, #eccd98); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+#footer{
+    height: 80px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /*background-color: #D3D3D3;*/
+    text-align: center;
+}
+
+#scrollContainer{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#leftPanel{
+    /*background-color: skyblue;*/
+    /*background-color: rgba( 236, 239, 241,0.3);*/
+    padding-top: 10px;
+    position:absolute;
+    /*width: 235px;*/
+    width: 30%;
+    left:0px;
+    top:0px;
+    bottom:0px;
+    overflow: auto;
+    border: 6px solid rgba(255,255,255, 0.7);
+}
+
+
+
+#rightPanel{
+    /*background-color: lightgrey;*/
+    /*background-color:  rgba( 236, 239, 241,0.3);*/
+    position:absolute; 
+    /*left:235px;*/
+    left: 30%;
+    top:0px;
+    right:0px;
+    bottom:0px;
+    margin-left: 15px;
+    /*border: 1px solid black;*/
+    border: 6px solid rgba(255,255,255, 0.7);
+    padding-top: 5px;
+}
+#parent{
+    margin-top:65px;
+    margin-bottom:80px;
+    margin-left: 5px;
+    margin-right: 5px;
+    position:absolute; 
+    top:0px; 
+    left:0px;
+    right:0px; 
+    bottom:0px;
+    /*border: 1px solid blue;*/
+}
+
+/* add margins at the sides on wide screens */
+@media only screen and (orientation:landscape) {
+    #parent { 
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+
+    #leftPanel{
+    
+        border: 9px solid rgba(255,255,255, 0.3);
+        border-radius: 5px;
+    }
+    #rightPanel{
+        
+        border: 9px solid rgba(255,255,255, 0.3);
+        border-radius: 5px;
+    }
+
+} 
+
+.aligner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aligner2{
+    display: flex;
+    align-items: center;
+}
+
+/* Stream containers */
+
+.smallStreamContainer{
+    max-width: 95%;
+    width: 200px;
+    margin: auto;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #003153;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0px 0px 5px #70716f;
+
+}
+
+.smallStreamContent{
+    height: 100px;
+
+}
+
+.smallStreamInfo{
+
+    
+    text-align: center;
+}
+
+.bigStreamContainer{
+    max-width: 95%;
+    width: 500px;
+    /*margin: auto;*/
+    margin-bottom: 5px;
+    padding: 8px;
+    border: 3px solid #808B96;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0px 0px 8px white;
+    overflow: hidden;
+
+}
+
+.bigStreamContent{
+    max-width: 100%;
+    max-height: 100%;
+
+}
+
+.bigStreamInfo{
+    
+    text-align: center;
+}
+
+#mainSpeakerImg{
+    max-width:100%;
+    max-height:100%;
+}
+
+
+.smallStreamQueueUi{
+    float: right;
+}
+
+#queueUi{
+    /*border: 1px solid black;*/
+    margin-top: 3px;
+    width: 100%;
+    padding: 5px;
+    background-color: #4e7282;  
+    color: white;
+    border-radius: 3px;
+    text-align:left;
+}
+#queueUiTitle{
+    float: left;
+}
+
+#queueUiUsers{
+    float: right;
+}
+
+.badge-queue{
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+
+.shadowed{
+    box-shadow: 10px 10px 150px 0px rgba(252,255,253,1);
+}
+
+.talker{
+    background-color:  #adcbe3;
+}
+
+#timeLeft{
+    /*border: 1px solid black;*/
+    background-color: #4e7282;
+    border-radius: 3px;
+    text-align: center;
+    margin-bottom: 5px;
+    color: white;
+    
+}
+
+.streamYou{
+    font-weight: bold;
+    color:#4e7282;
+}
+
+.btn-special{
+    /*background-color: rgb(41,43,47);*/
+}
+
+/* Bootstrap Overwrites */
+
+.btn-primary{
+    /*background-color: rgb(41,43,47);*/
+}
+
+.badge-default{
+    color: rgb(41,43,47);
+    border: 1px solid rgb(41,43,47);
+    background-color: white;
+}
+
+.rotate:hover
+{
+        transition:all 0.5s ease;
+        -webkit-transform: rotateZ(-360deg);
+        -ms-transform: rotateZ(-360deg);
+        transform: rotateZ(-360deg);
+}

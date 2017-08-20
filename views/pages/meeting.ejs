@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <% include ../partials/header.ejs %>
+        <link rel="stylesheet" type="text/css" href="/css/meeting-absolute.css" />
+        <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
+        <script type="text/javascript">
+            var apiKey = '<%= apiKey %>';
+                    var sessionId = '<%= sessionId %>';
+                    var sessionName = '<%= sessionName %>';
+                    var token = '<%= token %>';
+                    var userName = '<%= userName %>';
+                    var audioOnly = '<%= audioOnly %>';
+        </script>
+</head>
+
+<body>
+    <div id="header">
+        <div class="percentage-nav">
+            <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span>
+                </button> <span class="navbar-brand">Meeting: <%= sessionName %></span>
+                <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item" id="nav-item-addmeeting"> <a class="nav-link" href="/addmeeting">Add Meeting</a>
+                        </li>
+                        <li class="nav-item" id="nav-item-overview"> <a class="nav-link" href="/">Overview</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    
+    <div id="parent">
+        <div id="scrollContainer">
+        <div id="leftPanel">
+            <!--
+            <div class="smallStreamContainer">
+                <div class="smallStreamContent aligner">
+                    <i class="fa fa-user-circle-o fa-3x"></i>
+                </div>
+
+                <div class="smallStreamInfo">
+                    <hr>
+                    name
+                </div>
+            </div>
+
+            <div class="smallStreamContainer">
+                <div class="smallStreamContent aligner">
+                    <i class="fa fa-user-circle-o fa-3x"></i>
+                </div>
+
+                <div class="smallStreamInfo">
+                    <hr>
+                    name
+                </div>
+            </div>
+
+            <div class="smallStreamContainer">
+                <div class="smallStreamContent aligner">
+                    <i class="fa fa-user-circle-o fa-3x"></i>
+                </div>
+
+                <div class="smallStreamInfo">
+                    <hr>
+                    name
+                </div>
+            </div>
+            -->
+        </div>
+        </div>
+
+
+        
+        <div id="rightPanel" class="aligner">
+            
+
+
+                            <div class="bigStreamContainer" id="talkerPlaceholder">
+
+                    <!--
+                    <div class="progress">
+                            <div class="progress-bar" id="talkerTime" role="progressbar" style="width: 80%;">xx seconds</div>
+                    </div>
+                    <br>
+                    -->
+
+                    <div class="bigStreamContent aligner" id="talkerPlaceholderContent">
+                        <i class="fa fa-user-circle-o fa-5x"></i>
+                    </div>
+
+                    <div class="bigStreamInfo" id="bigStreamInfoContainer">
+                        <!--<hr>-->
+
+                        <hr>
+                     <div id="timeLeft">
+                      <i class="fa fa-hourglass" aria-hidden="true"></i>
+                    </div>
+                     <div id="queueUi">
+                        <strong>Queue</strong><span id="queueUiUsers"></span>
+                     </div>
+                        
+                    </div>
+                    
+                    
+
+                </div>
+
+
+        </div>
+        
+    </div>
+    <div class="aligner" id="footer">
+        <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary btn-special" id="btn_letmetalk"><i class="fa fa-phone"></i>
+            </button>
+            <button type="button" class="btn btn-secondary btn-special" id="btn_toggle_video"><i class="fa  fa-video-camera"></i>
+            </button>
+            <button type="button" class="btn btn-secondary btn-special" id="btn_superpower"><i class="fa  fa-bolt"><span class="badge badge-pill badge-default" id="superpower_left"> 3</span></i>
+            </button>
+            <button type="button" class="btn btn-secondary btn-special" id="btn_agreement"><i class="fa fa-thumbs-up"></i>
+            </button>
+            <button type="button" class="btn btn-secondary btn-special" id="btn_disagreement"><i class="fa  fa-thumbs-down"></i>
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn_infoModal" data-toggle="modal" data-target="#infoModal"><i class="fa fa-info"></i>
+            </button>
+        </div>
+           
+    </div>
+
+   
+    <!-- Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Meeting Controls</h5>
+           
+          </div>
+          <div class="modal-body">
+            <ul>
+                <li><i class="fa fa-phone"></i> / <kbd>space</kbd>
+                <ul>
+                    <li>talk</li>
+                    <li>get in queue</li>
+                    <li>leave queue</li>
+                </ul>    
+
+                </li>
+                <li><i class="fa  fa-video-camera"></i> 
+                <ul>
+                    <li>
+                        toggle Video Stream
+                    </li>
+                </ul>
+                </li>
+                <li><i class="fa  fa-bolt"></i>
+                <ul>
+                    <li>get more talking time if you are already talking</li>
+                    <li>jump to front of queue</li>
+                </ul>
+                </li>
+
+                <li>
+                    <i class="fa fa-thumbs-up"></i>
+                    <ul>
+                        <li>
+                            show agreement with current speaker
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <i class="fa fa-thumbs-down"></i>
+                    <ul>
+                        <li>
+                            express your disagreement with current speaker
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <hr>
+            <button type="button" class="btn btn-secondary" id="btn_analytics">Download Meeting Analytics
+            </button>
+
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+
+    <% include ../partials/footer.ejs %>
+    <script src="/js/absoluteCorrections.js"></script>
+    <script src="/js/meeting.js" ></script>
+</body>
+
+</html>

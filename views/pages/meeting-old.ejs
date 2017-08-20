@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/header.ejs %>
+  <link rel="stylesheet" type="text/css" href="/css/main.css" />
+  <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js"></script>
+  
+    <script type="text/javascript">
+        var apiKey = '<%= apiKey %>';
+        var sessionId = '<%= sessionId %>';
+        var sessionName = '<%= sessionName %>';
+        var token = '<%= token %>';
+        var userName = '<%= userName %>';   
+    </script>
+</head>
+
+  <body>
+    <% include ../partials/nav.ejs %>
+
+    
+    <div class="container">
+       <div>
+        <h3 style="text-align:center;">
+           <%= sessionName %>
+       </h3>
+      </div>
+
+        <div class="row">
+            <div class="col-4 bordered scroll max-page-high" id="panel-left">
+              <div class="scrollable-content">
+                <!-- Test Layout for small Stream UI -->
+                  <div class="small-stream-container">
+                    <div class="small-stream-box Aligner">
+                      <img src="http://via.placeholder.com/200x150" width="100%">
+                    </div>
+                    <div class="small-stream-username">
+                      <hr>
+                      <strong>Username</strong>
+                    </div>
+                  </div>
+
+                  <div class="small-stream-container">
+                    <div class="small-stream-box Aligner">
+                      <img src="http://via.placeholder.com/200x150" width="100%">
+                    </div>
+                    <div class="small-stream-username">
+                      <hr>
+                      <strong>Username</strong>
+                    </div>
+                  </div>
+
+                  <div class="small-stream-container">
+                    <div class="small-stream-box Aligner">
+                      <img src="http://via.placeholder.com/200x150" width="100%">
+                    </div>
+                    <div class="small-stream-username">
+                      <hr>
+                      <strong>Username</strong>
+                    </div>
+                  </div>
+
+                  <div class="small-stream-container">
+                    <div class="small-stream-box Aligner">
+                      <img src="http://via.placeholder.com/200x150" width="100%">
+                    </div>
+                    <div class="small-stream-username">
+                      <hr>
+                      <strong>Username</strong>
+                    </div>
+                  </div>
+
+                  <div class="small-stream-container">
+                  <div class="small-stream-container">
+                    <div class="small-stream-box Aligner">
+                      <img src="http://via.placeholder.com/200x150" width="100%">
+                    </div>
+                    <div class="small-stream-username">
+                      <hr>
+                      <strong>Username</strong>
+                    </div>
+                  </div>
+                  </div>
+              </div>
+
+                  
+
+
+            </div>  
+            <div class="col-8 bordered Aligner" id="panel-right">
+
+                  <!-- Test Layout for talker Stream UI -->
+                  <div class="big-stream-container">
+                    <div class="big-stream-box">
+                      <img src="http://via.placeholder.com/500x500" width="100%">
+                    </div>
+                    <div class="big-stream-username">
+                      <hr>
+                      <strong>Username</strong>
+                    </div>
+                  </div>
+
+            </div>
+        </div>
+
+        </div>
+  
+          <footer class="footer Aligner">
+            <div class="container">
+              
+               <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-primary" id="btn_letmetalk"><i class="fa fa-phone"></i></button>
+                <button type="button" class="btn btn-primary" id="btn_letmetalk"><i class="fa  fa-video-camera"></i></button>
+                <button type="button" class="btn btn-primary" id="btn_letmetalk"><i class="fa  fa-bolt"></i></button>
+                <button type="button" class="btn btn-primary" id="btn_letmetalk"><i class="fa fa-thumbs-up"></i></button>
+                <button type="button" class="btn btn-primary" id="btn_letmetalk"><i class="fa  fa-thumbs-down"></i></button>
+              </div>
+
+            
+            </div>
+            
+          </footer>
+
+        
+    <% include ../partials/footer.ejs %>
+    </body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/header.ejs %>
+  <link rel="stylesheet" type="text/css" href="/css/main-responsive.css" />
+  <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js"></script>
+  
+    <script type="text/javascript">
+        var apiKey = '<%= apiKey %>';
+        var sessionId = '<%= sessionId %>';
+        var sessionName = '<%= sessionName %>';
+        var token = '<%= token %>';
+        var userName = '<%= userName %>';   
+    </script>
+</head>
+
+    <body>
+    
+    <div id="full">
+      <!--<div id="header">This is the header content.</div>-->
+      <div id="nav-wrapper">
+       <% include ../partials/nav.ejs %>
+      </div>
+      <div id="fill-free-space">
+      dadafsdfgfsdfgdfgsdfggfd
+        <div class="container">
+          
+          <div class="row">
+
+            <div class="col-4 bordered" id="panel-left">
+
+            </div>
+
+            <div class="col-4 bordered" id="panel-left">
+
+            </div>
+
+          </div>
+         </div> 
+      </div>
+
+
+      <footer class="footer Aligner">
+            <div class="container">
+               <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-primary" id="btn_letmetalk"><i class="fa fa-phone"></i></button>
+                <button type="button" class="btn btn-primary" id="btn_letmetalk"><i class="fa  fa-video-camera"></i></button>
+                <button type="button" class="btn btn-primary" id="btn_letmetalk"><i class="fa  fa-bolt"></i></button>
+                <button type="button" class="btn btn-primary" id="btn_letmetalk"><i class="fa fa-thumbs-up"></i></button>
+                <button type="button" class="btn btn-primary" id="btn_letmetalk"><i class="fa  fa-thumbs-down"></i></button>
+              </div>
+            </div>
+      </footer>
+
+    </div>
+   
+  
+
+        
+    <% include ../partials/footer.ejs %>
+    </body>
+
+</html>
