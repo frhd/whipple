@@ -583,7 +583,7 @@ function handleDisagreement(senderStreamId) {
 
 function handleAudioLevel(audioLevel) {
     // set audio level to meter
-    document.getElementById("audioMeterVal").value(audioLevel);
+    $("#audioMeterVal").attr("value", audioLevel);
 }
 
 // visualize, that someone used a superpower
