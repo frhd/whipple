@@ -200,7 +200,7 @@ function initializeSession() {
     myPublisher.setStyle('audioLevelDisplayMode', 'on');
     myPublisher.setStyle('buttonDisplayMode', 'off')
     myPublisher.on('audioLevelUpdated', function(event) {
-        if (m.queue[0] == m.myPublisher.stream.streamId) {
+        if (m.queue[0] == myPublisher.stream) {
             currentAudioLevel = event.audioLevel;
             updateMyAudioLevel(currentAudioLevel);
         }
