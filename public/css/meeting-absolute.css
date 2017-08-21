@@ -148,8 +148,6 @@ body{
 .bigStreamContent{
     max-width: 100%;
     max-height: 100%;
-    position: relative;
-
 }
 
 .bigStreamInfo{
@@ -239,9 +237,9 @@ body{
 }
 
 #audioMeter{
-    position: relative;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 100px;
+    left: 200px;
     z-index: 1;
    
 }
