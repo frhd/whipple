@@ -29,10 +29,10 @@ function resizeUi() {
     // position audio level meter
     // get bottom left position of big stream content
     let offset = $("#talkerPlaceholderContent").offset();
-    let fromTop = offset.top + $("#talkerPlaceholderContent").height() * 0.9;
+    let fromTop = offset.top + $("#talkerPlaceholderContent").height();
     let left = offset.left;
 
-    $("#audioMeter").css("top", fromTop);
+    $("#audioMeter").css("top", fromTop + ($("#audioMeter").height() / 2));
     $("#audioMeter").css("left", left);
 
 
