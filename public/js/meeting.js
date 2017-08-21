@@ -15,6 +15,9 @@ const btnAnalyticsDownload = "btn_analytics";
 
 const btnToggleVideo = 'btn_toggle_video';
 
+// audio meter
+const audioMeter = "audioMeter";
+
 // Audio Files
 // ############################################################################
 var talkingSound = new Audio('/res/confirmation1.wav');
@@ -731,7 +734,15 @@ function updateUiTalkStatus(prevTalker, talksNow) {
         // clear central ui
         $("#" + talkerContent).html(`<i class="fa fa-user-circle-o fa-5x"></i>`);
         $("#" + talkTimeLeftUi).html(`<i class="fa fa-hourglass" aria-hidden="true"></i>`);
+
+        // make Audio meter invisible
+        $("#" + audioMeter).css("display", "none");
+
     } else {
+
+        // make audio meter visible
+        $("#" + audioMeter).css("display", "block");
+
         // remove placeholder
         //$("#" + talkerContent).html("");
         // add shadow to sidepanel
