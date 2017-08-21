@@ -32,7 +32,7 @@ function resizeUi() {
     let fromTop = offset.top + $("#talkerPlaceholderContent").height();
     let left = offset.left;
 
-    $("#audioMeter").css("top", fromTop - ($("#audioMeter").height() / 2));
+    $("#audioMeter").css("top", fromTop - ($("#audioMeter").height() * 1.25));
     $("#audioMeter").css("left", left);
 
 
