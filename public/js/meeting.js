@@ -239,8 +239,7 @@ function updateMyAudioLevel(audioLevel) {
     // remove oldest value
     audioSamples.splice(0, 1);
 
-    // add new value
-    console.log("add new audio value " + audioLevel);
+    // add new values
     audioSamples.push(audioLevel);
 
     // average
@@ -248,6 +247,7 @@ function updateMyAudioLevel(audioLevel) {
     for (let i = 0; i < audioSamples.length; i++) {
         total += audioSamples[i];
     }
+    console.log("new total " + total);
     let avg = total / audioSamples.length;
 
 
