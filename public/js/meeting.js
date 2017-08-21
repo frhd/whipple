@@ -578,6 +578,10 @@ function handleDisagreement(senderStreamId) {
 
 }
 
+function handleAudioLevel(audioLevel) {
+
+}
+
 // visualize, that someone used a superpower
 function visualizeSuperpowerUse(senderStreamId) {
     console.log(getStreamName(senderStreamId) + " used a Superpower");
