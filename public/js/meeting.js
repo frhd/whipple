@@ -200,12 +200,11 @@ function initializeSession() {
     myPublisher.setStyle('audioLevelDisplayMode', 'on');
     myPublisher.setStyle('buttonDisplayMode', 'off')
     myPublisher.on('audioLevelUpdated', function(event) {
-        currentAudioLevel = event.audioLevel;
-        updateMyAudioLevel(currentAudioLevel);
-        //log("Audio Level " + currentAudioLevel);
-        //if (audioLevel > 0.2) {
-        //log(" Currently talking. audioLevel " + event.audioLevel);
-        //}
+        if (m.queue[0] == m.myPublisher.stream.streamId) {
+            currentAudioLevel = event.audioLevel;
+            updateMyAudioLevel(currentAudioLevel);
+        }
+
     });
 
     function publishStream() {
@@ -224,9 +223,6 @@ function initializeSession() {
 
     }
 
-
-
-
     session.connect(token, publishStream);
     // Which function to call if a signal is received
     session.on("signal", receiveSignal);
@@ -243,7 +239,7 @@ function updateMyAudioLevel(audioLevel) {
     audioSamples.push(audioLevel);
 
     // average
-    let total;
+    let total = 0;
     for (let i = 0; i < audioSamples.length; i++) {
         total += audioSamples[i];
     }
