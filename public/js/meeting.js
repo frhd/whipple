@@ -310,6 +310,13 @@ function signalVisualizeLeaveQueue(_streamName) {
     });
 }
 
+// Signals the Audio level of a talker for everyone to visualize
+function signalAudioLevel(audioLevel){
+    session.signal({
+        data: "audioLevel#"+audioLevel
+    });
+}
+
 
 
 // ##################################################################
@@ -370,6 +377,9 @@ function receiveSignal(event) {
         case "visualizeLeaveQueue":
             //handleVisualizeLeaveQueue(res[1]);
             break;
+        case "audioLevel":
+            let audioLevel = res[1];
+            handleAudioLevel(audioLevel);    
         default:
             //log("ERROR: signaled command not found " + cmd);
     }
@@ -669,6 +679,15 @@ function updateUiQueue() {
 // also if the new talker is null
 function updateUiTalkStatus(prevTalker, talksNow) {
 
+
+    // if you are the talker, constantly signal your audio level to the session
+    let intervalAudioLevel
+    if(talksNow == m.myPublisher.stream.streamId){
+       intervalAudioLevel = setInterval(function(){ 
+        
+        }, 500);
+    }
+
     console.log("Update Ui talk status called");
 
     // if there is a prev talker, move his stream back to the sidePanel
@@ -731,6 +750,8 @@ function updateUiTalkStatus(prevTalker, talksNow) {
 
 
 }
+
+
 
 // return stream object for a given streamId
 function getStreamFromId(streamId) {
