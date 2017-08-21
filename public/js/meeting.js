@@ -714,7 +714,7 @@ function updateUiTalkStatus(prevTalker, talksNow) {
         console.log("setting interval function for audio level");
         intervalAudioLevel = setInterval(function() {
             signalAudioLevel(m.myAudioLevel);
-        }, 25);
+        }, 150);
     } else if (prevTalker == m.myPublisher.stream.streamId) {
         // remove interval function
         console.log("removing interval function for audio level");
