@@ -30,6 +30,9 @@ let session;
 // used for ui adjusting
 let prevTalker;
 
+// used for audio level monitoring
+let audioSamples = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
 
 class Meeting {
     constructor() {
@@ -197,7 +200,8 @@ function initializeSession() {
     myPublisher.setStyle('audioLevelDisplayMode', 'on');
     myPublisher.setStyle('buttonDisplayMode', 'off')
     myPublisher.on('audioLevelUpdated', function(event) {
-        //currentAudioLevel = event.audioLevel;
+        currentAudioLevel = event.audioLevel;
+        updateMyAudioLevel(currentAudioLevel);
         //log("Audio Level " + currentAudioLevel);
         //if (audioLevel > 0.2) {
         //log(" Currently talking. audioLevel " + event.audioLevel);
@@ -227,6 +231,27 @@ function initializeSession() {
     // Which function to call if a signal is received
     session.on("signal", receiveSignal);
 
+
+}
+
+// set the m.myAudioLevel to the average of the last 10 values
+function updateMyAudioLevel(audioLevel) {
+    // remove oldest value
+    audioSamples.splice(0, 1);
+
+    // add new value
+    audioSamples.push(audioLevel);
+
+    // average
+    let total;
+    for (let i = 0; i < audioSamples.length; i++) {
+        total += grades[i];
+    }
+    let avg = total / audioSamples.length;
+
+
+    // set value
+    console.log("last avg audio level " + avg);
 
 }
 
@@ -311,9 +336,9 @@ function signalVisualizeLeaveQueue(_streamName) {
 }
 
 // Signals the Audio level of a talker for everyone to visualize
-function signalAudioLevel(audioLevel){
+function signalAudioLevel(audioLevel) {
     session.signal({
-        data: "audioLevel#"+audioLevel
+        data: "audioLevel#" + audioLevel
     });
 }
 
@@ -379,7 +404,7 @@ function receiveSignal(event) {
             break;
         case "audioLevel":
             let audioLevel = res[1];
-            handleAudioLevel(audioLevel);    
+            handleAudioLevel(audioLevel);
         default:
             //log("ERROR: signaled command not found " + cmd);
     }
@@ -682,9 +707,9 @@ function updateUiTalkStatus(prevTalker, talksNow) {
 
     // if you are the talker, constantly signal your audio level to the session
     let intervalAudioLevel
-    if(talksNow == m.myPublisher.stream.streamId){
-       intervalAudioLevel = setInterval(function(){ 
-        
+    if (talksNow == m.myPublisher.stream.streamId) {
+        intervalAudioLevel = setInterval(function() {
+
         }, 500);
     }
 
