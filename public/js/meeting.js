@@ -241,13 +241,13 @@ function updateMyAudioLevel(audioLevel) {
     for (let i = 0; i < audioSamples.length; i++) {
         total += audioSamples[i];
     }
-    console.log("new total " + total);
+    //console.log("new total " + total);
     let avg = total / audioSamples.length;
 
 
     // set value
-    console.log("last avg audio level " + avg);
-
+    //console.log("last avg audio level " + avg);
+    m.myAudioLevel = avg;
 }
 
 
@@ -703,9 +703,14 @@ function updateUiTalkStatus(prevTalker, talksNow) {
     // if you are the talker, constantly signal your audio level to the session
     let intervalAudioLevel
     if (talksNow == m.myPublisher.stream.streamId) {
+        console.log("setting interval function for audio level");
         intervalAudioLevel = setInterval(function() {
-
+            signalAudioLevel(m.myAudioLevel);
         }, 500);
+    } else if (prevTalker == m.myPublisher.stream.streamId) {
+        // remove interval function
+        console.log("removing interval function for audio level");
+        clearInterval(intervalAudioLevel);
     }
 
     console.log("Update Ui talk status called");
