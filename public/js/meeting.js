@@ -245,7 +245,7 @@ function updateMyAudioLevel(audioLevel) {
     // average
     let total;
     for (let i = 0; i < audioSamples.length; i++) {
-        total += grades[i];
+        total += audioSamples[i];
     }
     let avg = total / audioSamples.length;
 
