@@ -240,6 +240,7 @@ function updateMyAudioLevel(audioLevel) {
     audioSamples.splice(0, 1);
 
     // add new value
+    console.log("add new audio value " + audioLevel);
     audioSamples.push(audioLevel);
 
     // average
