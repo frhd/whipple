@@ -241,6 +241,6 @@ body{
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 10;
+    z-index: 1;
    
 }
