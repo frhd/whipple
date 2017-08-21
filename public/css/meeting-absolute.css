@@ -236,3 +236,9 @@ body{
         -ms-transform: rotateZ(-360deg);
         transform: rotateZ(-360deg);
 }
+
+#audioMeter{
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
