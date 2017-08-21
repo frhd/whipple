@@ -238,7 +238,7 @@ body{
 }
 
 #audioMeter{
-    position: absolute;
+    position: fixed;
     top: 100px;
     left: 200px;
    
