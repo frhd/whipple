@@ -920,7 +920,7 @@ function uiTimeToEnd() {
     if (m.queue.length > 0) {
         //sconsole.log(Math.floor(secondsLeft) + " seconds left");
         $("#" + talkTimeLeftUi).html(Math.floor(secondsLeft));
-        alert("sec left: " + secondsLeft + "Date Now " + Date.now());
+        alert("sec left: " + secondsLeft + "Date Now secs" + (Date.now() / 1000));
         // if time is over
         if (secondsLeft <= 1) {
             $("#" + talkTimeLeftUi).html(`<i class="fa fa-hourglass" aria-hidden="true"></i>`);
