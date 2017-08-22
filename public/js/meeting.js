@@ -496,7 +496,7 @@ function handleStatusUpdate(_queueJSON, _talkerEndTime) {
     let talksNow = m.queue[0];
     //console.log("Endtime in Status Update " + _talkerEndTime);
     m.talkerEndTime = new Date(parseInt(_talkerEndTime)).getTime();
-    alert(m.talkerEndTime);
+    // alert(m.talkerEndTime);
 
     // log usernamequeue
     let userNameQueue = getUserNameQueue();
@@ -916,7 +916,7 @@ window.setInterval(function() {
 
 
 function uiTimeToEnd() {
-    let secondsLeft = (m.talkerEndTime - new Date().getTime()) / 1000;
+    var secondsLeft = (m.talkerEndTime - new Date().now()) / 1000;
     if (m.queue.length > 0) {
         //sconsole.log(Math.floor(secondsLeft) + " seconds left");
         $("#" + talkTimeLeftUi).html(Math.floor(secondsLeft));
