@@ -15,7 +15,7 @@ var opentok = new OpenTok(apiKey, apiSecret);
 generateNewSessionID();
 
 
-}
+
 
 function generateNewSessionID() {
     opentok.createSession({
