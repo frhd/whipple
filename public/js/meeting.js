@@ -108,6 +108,9 @@ m.talkerStartedAt = null;
 // inaitialize left superpowers
 m.superpowersLeft = m.config.superpowers;
 
+// timestamp synchronizing (difference to master in miliseconds)
+m.timeCorrection = 0;
+
 
 $(document).ready(function() {
     initializeSession();
@@ -313,10 +316,12 @@ function signalUseSuperpower() {
 }
 
 // Signal with the current meeting status
+// Also signal current time for synchronizing all peers
 function signalStatusUpdate(queue) {
     //console.log("statusUpdate#" + JSON.stringify(queue) + "#" + m.talkerEndTime);
+    let currTime = Date.now();
     session.signal({
-        data: "statusUpdate#" + JSON.stringify(queue) + "#" + m.talkerEndTime
+        data: "statusUpdate#" + JSON.stringify(queue) + "#" + m.talkerEndTime + "#" + currTime
     });
 }
 
@@ -392,7 +397,8 @@ function receiveSignal(event) {
         case "statusUpdate":
             var _queueJSON = res[1];
             var _talkerEndTime = res[2];
-            handleStatusUpdate(_queueJSON, _talkerEndTime);
+            var _masterTime = res[3];
+            handleStatusUpdate(_queueJSON, _talkerEndTime, _masterTime);
             break;
         case "visualizeAddQueue":
             //handleVisualizeAddQueue(res[1]);
@@ -486,9 +492,15 @@ function handleUseSuperpower(senderStreamId) {
 
 }
 
-function handleStatusUpdate(_queueJSON, _talkerEndTime) {
+function handleStatusUpdate(_queueJSON, _talkerEndTime, _masterTime) {
     //console.log("handleStatusUpdate");
     //console.log(_queueJSON);
+
+    // get master Time and use it to get correcting factor for all calculations with local time stamps
+    // is needed if not all peers have the exact same utc time
+
+    m.timeCorrection = _masterTime - Date.now();
+    console.log("Time correction " + m.timeCorrection);
 
     let oldQueueLength = m.queue.length;
     prevTalker = m.queue[0];
