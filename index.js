@@ -18,7 +18,7 @@ generateNewSessionID();
 }
 
 function generateNewSessionID() {
-    opentok.createSession(function(err, session) {
+    opentok.createSession({}, function(err, session) {
         if (err) throw err;
         app.set('sessionId', session.sessionId);
     });
