@@ -495,10 +495,10 @@ function handleStatusUpdate(_queueJSON, _talkerEndTime) {
     m.queue = JSON.parse(_queueJSON);
     let talksNow = m.queue[0];
     //console.log("Endtime in Status Update " + _talkerEndTime);
-    //m.talkerEndTime = new Date(parseInt(_talkerEndTime)).getTime();
+    m.talkerEndTime = new Date(parseInt(_talkerEndTime)).getTime();
 
     // just a test
-    m.talkerEndTime = new Date(now);
+    // m.talkerEndTime = new Date(now);
     // alert(m.talkerEndTime);
 
     // log usernamequeue
