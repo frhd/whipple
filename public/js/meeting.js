@@ -931,7 +931,7 @@ window.setInterval(function() {
 
 
 function uiTimeToEnd() {
-    let secondsLeft = (m.talkerEndTime - Date.now()) / 1000;
+    let secondsLeft = ((m.talkerEndTime + m.timeCorrection) - Date.now()) / 1000;
     if (m.queue.length > 0) {
         //sconsole.log(Math.floor(secondsLeft) + " seconds left");
         $("#" + talkTimeLeftUi).html(Math.floor(secondsLeft));
