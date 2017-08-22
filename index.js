@@ -14,11 +14,13 @@ var opentok = new OpenTok(apiKey, apiSecret);
 // needed for session geneeration to work directly after app restart
 generateNewSessionID();
 
-//{mediaMode: "routed"}
+
 }
 
 function generateNewSessionID() {
-    opentok.createSession({}, function(err, session) {
+    opentok.createSession({
+        mediaMode: "relayed"
+    }, function(err, session) {
         if (err) throw err;
         app.set('sessionId', session.sessionId);
     });
