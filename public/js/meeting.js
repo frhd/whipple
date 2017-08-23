@@ -23,6 +23,14 @@ var superpowerSound = new Audio('/res/gong1.mp3');
 var queueInSound = new Audio('/res/queueIn.mp3');
 var queueOutSound = new Audio('/res/queueOut.mp3');
 
+// volume adjustments
+let vol = 0.5;
+talkingSound.volume(vol);
+donetalkingSound.volume(vol);
+superpowerSound.volume(vol);
+queueInSound.volume(vol);
+queueOutSound.volume(vol);
+
 
 
 let session;
