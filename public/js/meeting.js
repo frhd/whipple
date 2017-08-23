@@ -815,7 +815,7 @@ $("#btn_superpower").click(function() {
     }
     if (m.config.superpowers <= 0) {
         // disable button
-        $("#btn_superpower").prop('disabled', true);
+        // $("#btn_superpower").prop('disabled', true);
     }
 });
 
