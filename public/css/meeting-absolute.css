@@ -252,3 +252,7 @@ body{
 #btn_letmetalk{
     color: #228B22;
 }
+
+.tooltip-inner {
+    white-space:pre-wrap;
+}
