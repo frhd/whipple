@@ -253,6 +253,8 @@ body{
     color: #228B22;
 }
 
+
+/* needed for linebreaks in tooltips*/
 .tooltip-inner {
     white-space:pre-wrap;
 }
