@@ -123,6 +123,10 @@ $(document).ready(function() {
     $('.btn-group button').attr('disabled', true);
 
 
+    // enable bootstrap tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+
+
     // Ui sizing stuff
     //$(talkerPlaceholderContent).height($(talkerPlaceholderContent).width() * 0.8);
 
