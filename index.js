@@ -19,7 +19,7 @@ generateNewSessionID();
 
 function generateNewSessionID() {
     opentok.createSession({
-        mediaMode: "relayed"
+        mediaMode: "routed"
     }, function(err, session) {
         if (err) throw err;
         app.set('sessionId', session.sessionId);

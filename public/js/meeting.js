@@ -15,9 +15,6 @@ const btnAnalyticsDownload = "btn_analytics";
 
 const btnToggleVideo = 'btn_toggle_video';
 
-// audio meter
-const audioMeter = "audioMeter";
-
 // Audio Files
 // ############################################################################
 var talkingSound = new Audio('/res/confirmation1.wav');
@@ -32,9 +29,6 @@ let session;
 
 // used for ui adjusting
 let prevTalker;
-
-// used for audio level monitoring
-let audioSamples = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 
 class Meeting {
@@ -112,9 +106,13 @@ m.superpowersLeft = m.config.superpowers;
 m.timeCorrection = 0;
 
 
+
 $(document).ready(function() {
     initializeSession();
     console.log("initialized");
+
+    // disable all Buttons for so that nobody can do stuff befor the everything is up and running
+    $('.btn-group button').attr('disabled', true);
 
 
     // Ui sizing stuff
@@ -206,9 +204,11 @@ function initializeSession() {
     myPublisher.setStyle('audioLevelDisplayMode', 'on');
     myPublisher.setStyle('buttonDisplayMode', 'off')
     myPublisher.on('audioLevelUpdated', function(event) {
-        currentAudioLevel = event.audioLevel;
-        updateMyAudioLevel(currentAudioLevel);
-
+        //currentAudioLevel = event.audioLevel;
+        //log("Audio Level " + currentAudioLevel);
+        //if (audioLevel > 0.2) {
+        //log(" Currently talking. audioLevel " + event.audioLevel);
+        //}
     });
 
     function publishStream() {
@@ -223,37 +223,21 @@ function initializeSession() {
             // correct IDs of publisher (overwrite defaults)
             $('#SideStreamContentdefault').attr('id', 'SideStreamContent' + myPublisher.stream.streamId);
             $('#SideStreamContainerdefault').attr('id', 'SideStreamContainer' + myPublisher.stream.streamId);
+            // enable buttons
+            $('.btn-group button').attr('disabled', false);
         });
 
     }
+
+
+
 
     session.connect(token, publishStream);
     // Which function to call if a signal is received
     session.on("signal", receiveSignal);
 
 
-}
 
-// set the m.myAudioLevel to the average of the last 10 values
-function updateMyAudioLevel(audioLevel) {
-    // remove oldest value
-    audioSamples.splice(0, 1);
-
-    // add new values
-    audioSamples.push(audioLevel);
-
-    // average
-    let total = 0;
-    for (let i = 0; i < audioSamples.length; i++) {
-        total += audioSamples[i];
-    }
-    //console.log("new total " + total);
-    let avg = total / audioSamples.length;
-
-
-    // set value
-    //console.log("last avg audio level " + avg);
-    m.myAudioLevel = avg;
 }
 
 
@@ -316,10 +300,9 @@ function signalUseSuperpower() {
 }
 
 // Signal with the current meeting status
-// Also signal current time for synchronizing all peers
 function signalStatusUpdate(queue) {
-    //console.log("statusUpdate#" + JSON.stringify(queue) + "#" + m.talkerEndTime);
     let currTime = Date.now();
+    //console.log("statusUpdate#" + JSON.stringify(queue) + "#" + m.talkerEndTime);
     session.signal({
         data: "statusUpdate#" + JSON.stringify(queue) + "#" + m.talkerEndTime + "#" + currTime
     });
@@ -335,13 +318,6 @@ function signalVisualizeAddQueue(_streamName) {
 function signalVisualizeLeaveQueue(_streamName) {
     session.signal({
         data: "visualizeLeaveQueue#" + _streamName
-    });
-}
-
-// Signals the Audio level of a talker for everyone to visualize
-function signalAudioLevel(audioLevel) {
-    session.signal({
-        data: "audioLevel#" + audioLevel
     });
 }
 
@@ -406,9 +382,6 @@ function receiveSignal(event) {
         case "visualizeLeaveQueue":
             //handleVisualizeLeaveQueue(res[1]);
             break;
-        case "audioLevel":
-            let audioLevel = res[1];
-            handleAudioLevel(audioLevel);
         default:
             //log("ERROR: signaled command not found " + cmd);
     }
@@ -443,6 +416,7 @@ function handleTalkAction(senderStreamId) {
 }
 
 function handleUseSuperpower(senderStreamId) {
+    let timeAdd = null;
     if (m.amIMaster()) {
         // if sender talks, make his talk time longer 
         // this should depend on the left time
@@ -451,7 +425,7 @@ function handleUseSuperpower(senderStreamId) {
             if (secondsLeft > 0) {
                 let extendMultiplier = (m.config.maxTalkingTime / (secondsLeft * 0.2)) / m.config.maxTalkingTime;
                 console.log("Time extend Multiplier " + extendMultiplier);
-                let timeAdd = m.config.extendTalkTimeBy * extendMultiplier;
+                timeAdd = m.config.extendTalkTimeBy * extendMultiplier;
                 if (timeAdd > m.config.extendTalkTimeBy) {
                     timeAdd = m.config.extendTalkTimeBy;
                 }
@@ -487,7 +461,7 @@ function handleUseSuperpower(senderStreamId) {
     // everyone should play a sound
     superpowerSound.play();
     // everyone should visualize the use of superpower in the central panel
-    visualizeSuperpowerUse(senderStreamId);
+    visualizeSuperpowerUse(senderStreamId, timeAdd);
 
 
 }
@@ -495,9 +469,6 @@ function handleUseSuperpower(senderStreamId) {
 function handleStatusUpdate(_queueJSON, _talkerEndTime, _masterTime) {
     //console.log("handleStatusUpdate");
     //console.log(_queueJSON);
-
-    // get master Time and use it to get correcting factor for all calculations with local time stamps
-    // is needed if not all peers have the exact same utc time
 
     m.timeCorrection = _masterTime - Date.now();
     console.log("Time correction " + m.timeCorrection);
@@ -508,10 +479,6 @@ function handleStatusUpdate(_queueJSON, _talkerEndTime, _masterTime) {
     let talksNow = m.queue[0];
     //console.log("Endtime in Status Update " + _talkerEndTime);
     m.talkerEndTime = new Date(parseInt(_talkerEndTime)).getTime();
-
-    // just a test
-    // m.talkerEndTime = new Date(now);
-    // alert(m.talkerEndTime);
 
     // log usernamequeue
     let userNameQueue = getUserNameQueue();
@@ -597,22 +564,24 @@ function handleDisagreement(senderStreamId) {
 
 }
 
-function handleAudioLevel(audioLevel) {
-    // set audio level to meter
-    $("#audioMeterVal").attr("value", audioLevel);
-}
-
 // visualize, that someone used a superpower
-function visualizeSuperpowerUse(senderStreamId) {
+function visualizeSuperpowerUse(senderStreamId, timeAdd) {
     console.log(getStreamName(senderStreamId) + " used a Superpower");
 
     // blend over superpower Symbol
     let html = `<i class="fa fa-bolt" id="animate-disagreement" aria-hidden="true" style="opacity: 0.0; color: #ffd89b;"></i>`;
     blendOver("talkerPlaceholderContent", html, "animate-disagreement", 1);
 
-    // blend over name
-    html = `<span id="name-overblend" style="background-color: #245a7c; opacity: 0.0; color: white; border-radius: 3px;">&nbsp${getStreamName(senderStreamId)}&nbsp</span>`;
-    blendOver("talkerPlaceholderContent", html, "name-overblend", getStreamName(senderStreamId).length + 3);
+    // if time bonus was given display the amount instead of name
+    if (timeAdd) {
+        html = `<span id="name-overblend" style="background-color: #245a7c; opacity: 0.0; color: white; border-radius: 3px;">&nbsp + ${timeAdd.toFixed(2)} s &nbsp</span>`;
+        blendOver("talkerPlaceholderContent", html, "name-overblend", 8);
+    } else {
+        // blend over name
+        html = `<span id="name-overblend" style="background-color: #245a7c; opacity: 0.0; color: white; border-radius: 3px;">&nbsp${getStreamName(senderStreamId)}&nbsp</span>`;
+        blendOver("talkerPlaceholderContent", html, "name-overblend", getStreamName(senderStreamId).length + 3);
+
+    }
 
 }
 
@@ -723,20 +692,6 @@ function updateUiQueue() {
 // also if the new talker is null
 function updateUiTalkStatus(prevTalker, talksNow) {
 
-
-    // if you are the talker, constantly signal your audio level to the session
-    let intervalAudioLevel
-    if (talksNow == m.myPublisher.stream.streamId) {
-        console.log("setting interval function for audio level");
-        intervalAudioLevel = setInterval(function() {
-            signalAudioLevel(m.myAudioLevel);
-        }, 150);
-    } else if (prevTalker == m.myPublisher.stream.streamId) {
-        // remove interval function
-        console.log("removing interval function for audio level");
-        clearInterval(intervalAudioLevel);
-    }
-
     console.log("Update Ui talk status called");
 
     // if there is a prev talker, move his stream back to the sidePanel
@@ -751,15 +706,7 @@ function updateUiTalkStatus(prevTalker, talksNow) {
         // clear central ui
         $("#" + talkerContent).html(`<i class="fa fa-user-circle-o fa-5x"></i>`);
         $("#" + talkTimeLeftUi).html(`<i class="fa fa-hourglass" aria-hidden="true"></i>`);
-
-        // make Audio meter invisible
-        $("#" + audioMeter).css("display", "none");
-
     } else {
-
-        // make audio meter visible
-        $("#" + audioMeter).css("display", "block");
-
         // remove placeholder
         //$("#" + talkerContent).html("");
         // add shadow to sidepanel
@@ -807,8 +754,6 @@ function updateUiTalkStatus(prevTalker, talksNow) {
 
 
 }
-
-
 
 // return stream object for a given streamId
 function getStreamFromId(streamId) {
@@ -935,7 +880,6 @@ function uiTimeToEnd() {
     if (m.queue.length > 0) {
         //sconsole.log(Math.floor(secondsLeft) + " seconds left");
         $("#" + talkTimeLeftUi).html(Math.floor(secondsLeft));
-        //alert("sec left: " + secondsLeft + "Date Now secs" + (Date.now() / 1000));
         // if time is over
         if (secondsLeft <= 1) {
             $("#" + talkTimeLeftUi).html(`<i class="fa fa-hourglass" aria-hidden="true"></i>`);
@@ -963,7 +907,7 @@ function addStreamToHTML(streamId, streamName, you) {
 
     const template =
         `
-	            <div id="SideStreamContainer${streamId}" class="smallStreamContainer">
+                <div id="SideStreamContainer${streamId}" class="smallStreamContainer">
                 <div id="SideStreamContent${streamId}" class="smallStreamContent aligner">
                    
                 </div>
@@ -974,7 +918,7 @@ function addStreamToHTML(streamId, streamName, you) {
                     <span class="smallStreamQueueUi"></span>
                 </div>
             </div>
-	`
+    `
         // Insert html to Stream Area
     $(leftPanel).append(template);
 
