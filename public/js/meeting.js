@@ -17,11 +17,11 @@ const btnToggleVideo = 'btn_toggle_video';
 
 // Audio Files
 // ############################################################################
-var talkingSound = new Audio('/res/confirmation1.wav');
-var doneTalkingSound = new Audio('/res/disconnect.wav');
-var superpowerSound = new Audio('/res/gong1.wav');
-var queueInSound = new Audio('/res/queueIn.wav');
-var queueOutSound = new Audio('/res/queueOut.wav');
+var talkingSound = new Audio('/res/confirmation1.mp3');
+var doneTalkingSound = new Audio('/res/disconnect.mp3');
+var superpowerSound = new Audio('/res/gong1.mp3');
+var queueInSound = new Audio('/res/queueIn.mp3');
+var queueOutSound = new Audio('/res/queueOut.mp3');
 
 
 
