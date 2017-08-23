@@ -28,7 +28,7 @@
               <% let icon = "fa fa-headphones fa-fw" %>
               <% if(!r.audio_only){icon = "fa fa-video-camera fa-fw"} %>
               <!--<a href="/meetings/<%= r.session_id %>?meetingName=<%= r.name %>" class="list-group-item"><%= r.name %></a>-->
-              <a class="list-group-item list-group-item:hover" onclick="joinMeeting('<%= r.session_id %>', '<%= r.session_name %>', '<%= r.audio_only %>')"><i class='<%= icon %>' aria-hidden='true' style="margin-right: 3px;"></i><%= r.session_name %> </a>
+              <button class="list-group-item" onclick="joinMeeting('<%= r.session_id %>', '<%= r.session_name %>', '<%= r.audio_only %>')"><i class='<%= icon %>' aria-hidden='true' style="margin-right: 3px;"></i><%= r.session_name %> </button>
           <% }); %>
       </div>
       <script>
