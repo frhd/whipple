@@ -25,11 +25,11 @@ var queueOutSound = new Audio('/res/queueOut.mp3');
 
 // volume adjustments
 let vol = 0.5;
-talkingSound.volume(vol);
-donetalkingSound.volume(vol);
-superpowerSound.volume(vol);
-queueInSound.volume(vol);
-queueOutSound.volume(vol);
+talkingSound.volume = vol;
+donetalkingSound.volume = vol;
+superpowerSound.volume = vol;
+queueInSound.volume = vol;
+queueOutSound.volume = vol;
 
 
 
