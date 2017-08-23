@@ -124,7 +124,12 @@ $(document).ready(function() {
 
 
     // enable bootstrap tooltips
-    $('[data-toggle="tooltip"]').tooltip();
+    // $('[data-toggle="tooltip"]').tooltip();
+
+    // tooltips should disapear when button was clicked
+    $('[data-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    })
 
 
     // Ui sizing stuff
