@@ -243,6 +243,6 @@ body{
    
 }
 
-.list-group:hover{
+.list-group-item:hover{
     background-color: #ffd89b;
 }
