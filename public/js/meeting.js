@@ -17,11 +17,15 @@ const btnToggleVideo = 'btn_toggle_video';
 
 // Audio Files
 // ############################################################################
-var talkingSound = new Audio('/res/confirmation1.mp3');
-var doneTalkingSound = new Audio('/res/disconnect.mp3');
-var superpowerSound = new Audio('/res/gong1.mp3');
-var queueInSound = new Audio('/res/queueIn.mp3');
-var queueOutSound = new Audio('/res/queueOut.mp3');
+let talkingSound = new Audio('/res/confirmation1.mp3');
+let doneTalkingSound = new Audio('/res/disconnect.mp3');
+let superpowerSound = new Audio('/res/gong1.mp3');
+let queueInSound = new Audio('/res/queueIn.mp3');
+let queueOutSound = new Audio('/res/queueOut.mp3');
+let notificationSound = new Audio('/res/notification.mp3');
+let joinSound = new Audio('/res/userjoin.mp3');
+
+
 
 // volume adjustments
 let vol = 0.1;
@@ -30,6 +34,8 @@ doneTalkingSound.volume = vol;
 superpowerSound.volume = vol;
 queueInSound.volume = vol;
 queueOutSound.volume = vol;
+notificationSound.volume = vol;
+joinSound.volume = vol;
 
 
 
@@ -176,6 +182,9 @@ function initializeSession() {
             console.log("Status update signaled because of new user");
             signalStatusUpdate(m.queue);
         }
+
+        // play joining sound
+        joinSound.play();
 
     });
 
