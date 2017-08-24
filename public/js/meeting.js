@@ -24,6 +24,7 @@ let queueInSound = new Audio('/res/queueIn.mp3');
 let queueOutSound = new Audio('/res/queueOut.mp3');
 let notificationSound = new Audio('/res/notification.mp3');
 let joinSound = new Audio('/res/userjoin.mp3');
+let alarmSound = new Audio('/res/alarm.mp3');
 
 
 
@@ -36,6 +37,7 @@ queueInSound.volume = vol;
 queueOutSound.volume = vol;
 notificationSound.volume = vol + 0.2;
 joinSound.volume = vol;
+alarmSound.volume = vol + 0.2;
 
 
 
@@ -118,6 +120,8 @@ m.superpowersLeft = m.config.superpowers;
 
 // timestamp synchronizing (difference to master in miliseconds)
 m.timeCorrection = 0;
+
+
 
 
 
@@ -907,10 +911,16 @@ window.setInterval(function() {
 
 
 function uiTimeToEnd() {
-    let secondsLeft = ((m.talkerEndTime - m.timeCorrection) - Date.now()) / 1000;
+    let secondsLeft = Math.floor(((m.talkerEndTime - m.timeCorrection) - Date.now()) / 1000);
     if (m.queue.length > 0) {
         //sconsole.log(Math.floor(secondsLeft) + " seconds left");
-        $("#" + talkTimeLeftUi).html(Math.floor(secondsLeft));
+        $("#" + talkTimeLeftUi).html(secondsLeft);
+
+        // if you have 10 seconds left, play warning sound
+        if (secondsLeft == 10) {
+            alarmSound.play();
+        }
+
         // if time is over
         if (secondsLeft <= 1) {
             $("#" + talkTimeLeftUi).html(`<i class="fa fa-hourglass" aria-hidden="true"></i>`);
