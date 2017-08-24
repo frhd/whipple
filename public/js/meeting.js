@@ -918,11 +918,13 @@ function uiTimeToEnd() {
 
         // if you have 10 seconds left, play warning sound
         if (secondsLeft == 10) {
-            alarmSound.play();
+            if (m.queue[0] == myPublisher.stream.streamId) {
+                alarmSound.play();
+            }
         }
 
         // if time is over
-        if (secondsLeft <= 1) {
+        if (secondsLeft <= 0) {
             $("#" + talkTimeLeftUi).html(`<i class="fa fa-hourglass" aria-hidden="true"></i>`);
             // if you are the talker, stop now
             if (m.queue[0] == m.myPublisher.stream.streamId) {
