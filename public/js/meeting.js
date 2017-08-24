@@ -918,7 +918,7 @@ function uiTimeToEnd() {
 
         // if you have 10 seconds left, play warning sound
         if (secondsLeft == 10) {
-            if (m.queue[0] == myPublisher.stream.streamId) {
+            if (m.queue[0] == m.myPublisher.stream.streamId) {
                 alarmSound.play();
             }
         }
