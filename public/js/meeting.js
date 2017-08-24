@@ -201,11 +201,17 @@ function initializeSession() {
         // clean exit of user
         m.removeUser(event.stream);
         if (m.amIMaster()) {
+            console.log("Master caught user leaving");
             // remove user from queue
             let newQueue = m.queue.filter(function(e) {
                 return e !== event.stream.streamId
             });
             m.queue = newQueue;
+            // queue is not empty, set new endtime for talker
+            if (m.queue.length > 0) {
+                let talkingStartedAt = new Date().getTime();
+                m.talkerEndTime = talkingStartedAt + (1000 * m.config.maxTalkingTime);
+            }
             signalStatusUpdate(m.queue);
         }
 
