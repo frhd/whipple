@@ -572,6 +572,9 @@ function handleStatusUpdate(_queueJSON, _talkerEndTime, _masterTime) {
 
 function handleAgreement(senderStreamId) {
 
+    // play sound
+    notificationSound.play();
+
     let html = `<i class="fa fa-thumbs-up" id="animate-agreement" aria-hidden="true" style="opacity: 0.0; color: #ffd89b;"></i>`;
     blendOver("talkerPlaceholderContent", html, "animate-agreement", 1);
 
@@ -581,6 +584,8 @@ function handleAgreement(senderStreamId) {
 
 
 function handleDisagreement(senderStreamId) {
+
+    notificationSound.play();
 
     let html = `<i class="fa fa-thumbs-down" id="animate-disagreement" aria-hidden="true" style="opacity: 0.0; color: #ffd89b;"></i>`;
     blendOver("talkerPlaceholderContent", html, "animate-disagreement", 1);
