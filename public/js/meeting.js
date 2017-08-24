@@ -495,7 +495,7 @@ function handleUseSuperpower(senderStreamId) {
     // everyone should play a sound
     superpowerSound.play();
     // everyone should visualize the use of superpower in the central panel
-    visualizeSuperpowerUse(senderStreamId, timeAdd);
+    visualizeSuperpowerUse(senderStreamId, m.config.extendTalkTimeBy * 1000);
 
 
 }
