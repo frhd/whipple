@@ -623,14 +623,14 @@ function blendOver(targetId, _html, id, textLength) {
 
     $("#" + id).animate({
         opacity: '1.0'
-    });
+    }, 2000);
     $("#" + id).animate({
         opacity: '0.0'
     }, {
         complete: function() {
             $("#" + id).remove();
         }
-    });
+    }, 2000);
 
 
 }
