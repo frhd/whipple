@@ -34,7 +34,7 @@ doneTalkingSound.volume = vol;
 superpowerSound.volume = vol;
 queueInSound.volume = vol;
 queueOutSound.volume = vol;
-notificationSound.volume = vol;
+notificationSound.volume = vol + 0.2;
 joinSound.volume = vol;
 
 
