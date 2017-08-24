@@ -922,7 +922,8 @@ function uiTimeToEnd() {
 
         // if you have 10 seconds left, play warning sound
         if (secondsLeft == 10) {
-            if (m.queue[0] == m.myPublisher.stream.streamId) {
+            // alarm if you are the talker or the next one in line
+            if ((m.queue[0] == m.myPublisher.stream.streamId) || (m.queue[1] == m.myPublisher.stream.streamId)) {
                 alarmSound.play();
             }
         }
