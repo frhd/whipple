@@ -459,8 +459,12 @@ function handleUseSuperpower(senderStreamId) {
                 if (timeAdd > m.config.extendTalkTimeBy) {
                     timeAdd = m.config.extendTalkTimeBy;
                 }
-                console.log("Time added " + timeAdd);
-                m.talkerEndTime += timeAdd * 1000;
+                // console.log("Time added " + timeAdd);
+                // m.talkerEndTime += timeAdd * 1000;
+
+                // extend time by static amount
+
+                m.talkerEndTime += m.config.extendTalkTimeBy * 1000;
                 signalStatusUpdate(m.queue);
             }
         }
