@@ -208,11 +208,11 @@ function initializeSession() {
             });
             m.queue = newQueue;
             // queue is not empty, set new endtime for talker
-            if (m.queue.length > 0) {
-                let talkingStartedAt = new Date().getTime();
-                m.talkerEndTime = talkingStartedAt + (1000 * m.config.maxTalkingTime);
-            }
-            signalStatusUpdate(m.queue);
+            //if (m.queue.length > 0) {
+            //    let talkingStartedAt = new Date().getTime();
+            //    m.talkerEndTime = talkingStartedAt + (1000 * m.config.maxTalkingTime);
+            //}
+            signalStatusUpdate(newQueue);
         }
 
 
