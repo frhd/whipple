@@ -262,8 +262,8 @@ body{
 
 @media (max-width: 768px) {
   .btn-responsive {
-    padding-left:10px;
-    padding-right:10px;
+    padding-left:10px !important;
+    padding-right:10px !important;
   }
 }
 
