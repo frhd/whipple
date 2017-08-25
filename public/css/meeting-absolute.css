@@ -261,19 +261,8 @@ body{
 
 
 @media (max-width: 768px) {
-  .btn-responsive i{
-    font-size:50%;
+  .btn-responsive{
+    padding: 12px 10px;
   }
 }
 
-@media (min-width: 768px) {
-  .btn-responsive i{
-    font-size:75%;
-  }
-}
-
-@media (min-width: 992px) {
-  .btn-responsive i{
-    font-size:100%;
-  }
-}
