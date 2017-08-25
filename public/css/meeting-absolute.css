@@ -263,6 +263,7 @@ body{
   .btn-responsive {
     padding:2px 4px;
     font-size:50%;
+    background-color: black;
     line-height: 1;
   }
 }
