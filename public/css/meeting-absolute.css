@@ -21,7 +21,6 @@ body{
     position: absolute;
     bottom: 0;
     width: 100%;
-    max-width: 100vw;
     /*background-color: #D3D3D3;*/
     text-align: center;
 }
