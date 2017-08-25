@@ -258,3 +258,11 @@ body{
 .tooltip-inner {
     white-space:pre-wrap;
 }
+
+@media (max-width: 768px) {
+  .btn-responsive {
+    padding:2px 4px;
+    font-size:80%;
+    line-height: 1;
+  }
+}
