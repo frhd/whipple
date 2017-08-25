@@ -262,7 +262,7 @@ body{
 @media (max-width: 768px) {
   .btn-responsive {
     padding:2px 4px;
-    font-size:80%;
+    font-size:50%;
     line-height: 1;
   }
 }
