@@ -852,6 +852,11 @@ $("#btn_superpower").click(function() {
     }
 });
 
+// leave the meeting button
+$("#btn_leave").click(function() {
+    window.location.href = "/";
+});
+
 // A click on Spacebar does the same than a click on the talk button
 document.body.onkeyup = function(e) {
     if (e.keyCode == 32) {
