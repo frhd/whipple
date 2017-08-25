@@ -202,7 +202,7 @@ function initializeSession() {
         m.removeUser(event.stream);
         if (m.amIMaster()) {
             console.log("Master caught user leaving");
-            if (m.queue.indexOf(senderStreamId) != -1) {
+            if (m.queue.indexOf(event.stream.streamId) != -1) {
                 // leave queue clean
                 handleTalkAction(event.stream.streamId);
             }
