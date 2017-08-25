@@ -261,28 +261,28 @@ body{
 
 
 @media (max-width: 768px) {
-  .btn-responsive {
+  .btn-responsive i{
     font-size:11px;
     padding:4px 6px;
   }
 }
 
 @media (min-width: 768px) {
-  .btn-responsive {
+  .btn-responsive i{
     font-size:12px;
     padding:6px 12px;
   }
 }
 
 @media (min-width: 992px) {
-  .btn-responsive {
+  .btn-responsive i{
     font-size:14px;
     padding:8px 12px;
   }
 }
 
 @media (min-width: 1200px) {
-  .btn-responsive {
+  .btn-responsive i{
     padding:10px 16px;
     font-size:18px;
   }
