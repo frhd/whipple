@@ -11,6 +11,7 @@
         <h1>Meetings Overview</h1>
         <p class="lead">click on a meeting to join the conversation</p>
       </div>
+      <!--
       <form id="userNameForm">
         <div class="form-group">
           <label for="meetingName"><h3>1. Choose your username</h3></label>
@@ -18,6 +19,7 @@
           <small class="form-text text-muted">This name will be displayed in a meeting </small>
         </div>
       </form>
+      -->
 
       <h3>
       2. Choose your channel
@@ -34,7 +36,7 @@
       <script>
        // react to click on meeting
       function joinMeeting(sessionId, sessionName, audioOnly){
-        let userName = $("#userName").val();
+        //let userName = $("#userName").val();
         if(userName.length > 0){
             // go to meeting
             window.location.href = "/meetings/"+sessionId+"?meetingName="+sessionName+"&userName="+userName+"&audioOnly="+audioOnly;
