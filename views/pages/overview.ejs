@@ -54,15 +54,14 @@
           if (inputValue === false) return false;
           
           if (inputValue === "") {
-            swal.showInputError("You need to enter some name");
+            swal.showInputError("You need to enter a name");
             return false
           }
           
-          swal("Nice!", "You wrote: " + inputValue, "success");
+          swal("Nice!", "You will join as: " + inputValue, "success");
+          window.location.href = "/meetings/"+sessionId+"?meetingName="+sessionName+"&userName="+inputValue+"&audioOnly="+audioOnly;
         });
 
-
-        window.location.href = "/meetings/"+sessionId+"?meetingName="+sessionName+"&userName="+userName+"&audioOnly="+audioOnly;
         //}else{
         //  alert("Please enter a username");
         //}
