@@ -141,6 +141,14 @@ $(document).ready(function() {
         trigger: 'hover'
     })
 
+    // test sweetalert
+    swal({
+        title: "Error!",
+        text: "Here's my error message!",
+        type: "error",
+        confirmButtonText: "Cool"
+    });
+
 
     // Ui sizing stuff
     //$(talkerPlaceholderContent).height($(talkerPlaceholderContent).width() * 0.8);
