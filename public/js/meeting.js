@@ -141,6 +141,15 @@ $(document).ready(function() {
         trigger: 'hover'
     })
 
+    // show tips on how to contro, a meeting
+    swal({
+        title: "Getting started",
+        text: "Use <i class="
+        fa fa - hand - pointer - o "></i> / <kbd>space</kbd> to start talking! Mor Information on <i class="
+        fa fa - info "></i>",
+        html: true
+    });
+
 
     // Ui sizing stuff
     //$(talkerPlaceholderContent).height($(talkerPlaceholderContent).width() * 0.8);
