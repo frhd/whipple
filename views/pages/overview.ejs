@@ -37,12 +37,35 @@
        // react to click on meeting
       function joinMeeting(sessionId, sessionName, audioOnly){
         //let userName = $("#userName").val();
-        if(userName.length > 0){
-            // go to meeting
-            window.location.href = "/meetings/"+sessionId+"?meetingName="+sessionName+"&userName="+userName+"&audioOnly="+audioOnly;
-        }else{
-          alert("Please enter a username");
-        }
+        //if(userName.length > 0){
+        // go to meeting
+        // promt user name
+
+        swal({
+        title: "Username",
+        text: "please enter your name",
+        type: "input",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        animation: "slide-from-top",
+        inputPlaceholder: "your name"
+        },
+        function(inputValue){
+          if (inputValue === false) return false;
+          
+          if (inputValue === "") {
+            swal.showInputError("You need to enter some name");
+            return false
+          }
+          
+          swal("Nice!", "You wrote: " + inputValue, "success");
+        });
+
+
+        window.location.href = "/meetings/"+sessionId+"?meetingName="+sessionName+"&userName="+userName+"&audioOnly="+audioOnly;
+        //}else{
+        //  alert("Please enter a username");
+        //}
       }
       </script>
     </div><!-- /.container -->
