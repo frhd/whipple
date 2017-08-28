@@ -145,7 +145,7 @@ $(document).ready(function() {
     swal({
         title: "Getting started",
         text: `Use <i class="
-        fa fa-hand-pointer-o "></i> / <kbd>space</kbd> to start talking! More Information on <i class="
+        fa fa-hand-pointer-o "></i> or <kbd>space</kbd> to start talking! More Information on <i class="
         fa fa-info "></i>`,
         html: true
     });
