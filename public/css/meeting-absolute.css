@@ -267,6 +267,13 @@ body{
   }
 }
 
+@media (min-width: 1000px){
+    #btn_letmetalk{
+        padding-left:35px !important;
+        padding-right:35px !important;
+    }
+}
+
 #btn_leave{
     color: red;
 }
