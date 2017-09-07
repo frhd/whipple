@@ -893,7 +893,7 @@ $("#btn_leave").click(function() {
 document.body.onkeyup = function(e) {
     if (e.keyCode == 32) {
         // only if focus is not on the notes
-        if (document.activeElement === document.getElementById('notes')) {
+        if (document.activeElement != document.getElementById('notes')) {
             signalTalkAction();
         }
     }
