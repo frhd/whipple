@@ -893,8 +893,8 @@ $("#btn_leave").click(function() {
 document.body.onkeyup = function(e) {
     if (e.keyCode == 32) {
         // only if focus is not on the notes
+        console.log("focus on " + $("#draggable").is(":focus"));
         if ($("#draggable").is(":focus")) {
-            console.log("focus on " + $("#draggable").is(":focus"));
             signalTalkAction();
         }
     }
