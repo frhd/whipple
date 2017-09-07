@@ -281,7 +281,7 @@ body{
 #draggable { 
     width: 320px; padding: 0.5em;
     position: absolute;
-    bottom: 20; 
+    bottom: 20px; 
 }
 
 /* make notes invisible on mobile devices */
