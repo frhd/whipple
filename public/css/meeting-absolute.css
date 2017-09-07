@@ -71,7 +71,6 @@ body{
     left:0px;
     right:0px; 
     bottom:0px;
-    overflow:hidden;
     /*border: 1px solid blue;*/
 }
 
@@ -281,4 +280,11 @@ body{
 
 #draggable { 
     width: 320px; padding: 0.5em; 
+}
+
+/* make notes invisible on mobile devices */
+@media (max-width: 500px) {
+    #draggable { 
+        display: none;
+    }
 }
