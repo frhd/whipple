@@ -865,7 +865,25 @@ $("#btn_superpower").click(function() {
 
 // leave the meeting button
 $("#btn_leave").click(function() {
-    window.location.href = "/";
+
+    swal({
+            title: "Leave the Meeting",
+            text: "do you realy want to leave this meeting?",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            animation: "slide-from-top",
+        },
+        function(inputValue) {
+            if (inputValue === false) return false;
+
+            if (inputValue === "") {
+                swal.showInputError("You need to enter a name");
+                return false
+            }
+            window.location.href = "/";
+        });
+
+    //window.location.href = "/";
 });
 
 // A click on Spacebar does the same than a click on the talk button
