@@ -150,6 +150,9 @@ $(document).ready(function() {
         html: true
     });
 
+    // jquery ui
+    $("#draggable").draggable();
+
 
     // Ui sizing stuff
     //$(talkerPlaceholderContent).height($(talkerPlaceholderContent).width() * 0.8);
