@@ -515,7 +515,8 @@ function handleUseSuperpower(senderStreamId) {
     // everyone should play a sound
     superpowerSound.play();
     // everyone should visualize the use of superpower in the central panel
-    visualizeSuperpowerUse(senderStreamId, m.config.extendTalkTimeBy);
+    // send queue position of superpower user to decide what symbol should be displayed
+    visualizeSuperpowerUse(senderStreamId, m.queue.indexOf(senderStreamId));
 
 
 }
@@ -624,16 +625,17 @@ function handleDisagreement(senderStreamId) {
 }
 
 // visualize, that someone used a superpower
-function visualizeSuperpowerUse(senderStreamId, timeAdd) {
+function visualizeSuperpowerUse(senderStreamId, userQueuePosition) {
     console.log(getStreamName(senderStreamId) + " used a Superpower");
 
+
     // blend over superpower Symbol
-    let html = `<i class="fa fa-bolt" id="animate-disagreement" aria-hidden="true" style="opacity: 0.0; color: #ffd89b;"></i>`;
-    blendOver("talkerPlaceholderContent", html, "animate-disagreement", 1);
+    let html = `<i class="fa fa-bolt" id="animate-superpower" aria-hidden="true" style="opacity: 0.0; color: #ffd89b;"></i>`;
+    blendOver("talkerPlaceholderContent", html, "animate-superpower", 1);
 
     // if time bonus was given display the amount instead of name
-    if (timeAdd) {
-        html = `<span id="name-overblend" style="background-color: #245a7c; opacity: 0.0; color: white; border-radius: 3px;">&nbsp + ${timeAdd.toFixed(2)} s &nbsp</span>`;
+    if (userQueuePosition == 0) {
+        html = `<span id="name-overblend" style="background-color: #245a7c; opacity: 0.0; color: white; border-radius: 3px;">&nbsp + ${m.config.extendTalkTimeBy.toFixed(2)} s &nbsp</span>`;
         blendOver("talkerPlaceholderContent", html, "name-overblend", 8);
     } else {
         // blend over name
