@@ -897,9 +897,10 @@ document.body.onkeyup = function(e) {
 }
 
 // this blocks the page from scrolling down when spacebar is pressed
+// deactivated to mae space usable in the notes
 document.body.onkeydown = function(e) {
     if (e.keyCode == 32) {
-        return false;
+        //return false;
     }
 }
 
