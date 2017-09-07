@@ -279,5 +279,5 @@ body{
 }
 
 #draggable { 
-    padding: 0.5em; 
+    width: 300px; padding: 0.5em; 
 }
