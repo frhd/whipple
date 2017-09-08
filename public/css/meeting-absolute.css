@@ -279,7 +279,7 @@ body{
     color: red;
 }
 
-#draggable { 
+#draggable-notes { 
     width: 320px; padding: 0.5em;
     position: absolute;
     bottom: 20px; 
@@ -287,7 +287,7 @@ body{
 
 /* make notes invisible on mobile devices */
 @media (max-width: 500px) {
-    #draggable { 
+    #draggable-notes { 
         display: none;
     }
 }
