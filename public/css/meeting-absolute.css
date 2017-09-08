@@ -260,6 +260,9 @@ body{
     white-space:pre-wrap;
 }
 
+.btn-responsive{
+    text-align: center;
+}
 
 @media (max-width: 500px) {
   .btn-responsive {
