@@ -151,7 +151,7 @@ $(document).ready(function() {
     });
 
     // jquery ui
-    $("#draggable").draggable();
+    $("#draggable-notes").draggable();
 
 
     // Ui sizing stuff
@@ -955,7 +955,7 @@ function downloadAnalytics() {
     window.location.href = "data:application/octet-stream," + encodeURIComponent(meetingAnalytics);
 }
 
-$("#btn_close_nodes").click(function() {
+$("#btn_close_notes").click(function() {
     // make notes invisible
     $("#draggable-notes").css("display", "none");
 });
