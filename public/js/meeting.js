@@ -955,11 +955,16 @@ function downloadAnalytics() {
     window.location.href = "data:application/octet-stream," + encodeURIComponent(meetingAnalytics);
 }
 
+// note related click events
+
 $("#btn_close_notes").click(function() {
     // make notes invisible
     $("#draggable-notes").css("display", "none");
 });
 
+$("#show_notes").click(function() {
+    $("#draggable-notes").css("display", "inline");
+});
 
 // Interval Functions that run all the time to update stuff like 
 // left talking time or total meeting time
