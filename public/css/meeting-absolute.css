@@ -288,9 +288,8 @@ body{
     bottom: 20px; 
 }
 
-/* make notes invisible on mobile devices */
-@media (max-width: 500px) {
-    #draggable-notes { 
-        display: none;
-    }
+/* make notes invisible by default */
+
+#draggable-notes { 
+    display: none;
 }
