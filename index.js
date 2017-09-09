@@ -6,8 +6,8 @@ var OpenTok = require('opentok')
 
 
 // set TokBox Api Key and secret
-var apiKey = "45937382";
-var apiSecret = "5f7cfb241d251ca855b256c2c4aba040d4d221b8";
+var apiKey = process.env.TOKBOX_API;
+var apiSecret = process.env.TOKBOX_SECRET;
 
 // Initialize OpenTok
 var opentok = new OpenTok(apiKey, apiSecret);
