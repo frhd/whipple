@@ -41,8 +41,9 @@ app.set('view engine', 'ejs');
 // ############################################################################
 
 // Landing Page: Overview of currently active meetings
+
 app.get('/', function(req, res) {
-    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+    pg.connect(process.env.DATABASE_URL + "?ssl=true", function(err, client, done) {
         client.query('SELECT * FROM public.meetings_v2', function(err, result) {
             done();
             if (err) {
