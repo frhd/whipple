@@ -845,8 +845,19 @@ $("#btn_toggle_video").click(function() {
     }
 });
 
+// remove focus from button after click
+$("#btn_toggle_video").mouseup(function() {
+    $(this).blur();
+})
+
+
+
 // Send a let me talk signal
 $("#btn_letmetalk").click(signalTalkAction);
+// remove focus from button after click
+$("#btn_letmetalk").mouseup(function() {
+    $(this).blur();
+})
 
 $("#btn_superpower").click(function() {
     if (m.config.superpowers > 0) {
@@ -865,6 +876,11 @@ $("#btn_superpower").click(function() {
         // $("#btn_superpower").prop('disabled', true);
     }
 });
+
+// remove focus from button after click. Otherwise spacebar could trigger it.
+$("#btn_superpower").mouseup(function() {
+    $(this).blur();
+})
 
 // leave the meeting button
 $("#btn_leave").click(function() {
@@ -922,7 +938,13 @@ $("#btn_donetalking").click(function() {
 
 // React to clicks on agreement Buttons
 $("#btn_agreement").click(signalExpressAgreement);
+$("#btn_agreement").mouseup(function() {
+    $(this).blur();
+})
 $("#btn_disagreement").click(signalExpressDisagreement);
+$("#btn_disagreement").mouseup(function() {
+    $(this).blur();
+})
 
 // Meeting Analytics Download Button
 btnAnalyticsDownload
