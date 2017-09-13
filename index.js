@@ -92,6 +92,62 @@ app.post('/meetings', function(req, res) {
     if (typeof sessionId == 'undefined') {
         res.end('Could not generate a new session ID');
     }
+});
+
+// A simpler way to create and join a meeting
+// just a roomname is is needed (via url). The session is than created if it not already existed
+// The user name is asked when the user enters the meeting
+app.get('/:roomName', function(req, res) {
+
+    const roomName = req.params.roomName;
+    // session id will be pulled from database
+    var sessionId = '';
+
+    // check, if room with that name already exists, otherwise create it in database
+    pg.connect(process.env.DATABASE_URL + "?ssl=true", function(err, client, done) {
+        client.query('SELECT * FROM public.meetings_v2 where session_name = $1', [roomName], function(err, result) {
+            done();
+            if (err) {
+                console.error(err);
+                res.send("Error " + err);
+            } else {
+                // if room does not exits, create it now
+                if(result.rows.length == 0){
+                    generateNewSessionID();
+                    const sessionId = app.get('sessionId');
+                    client.query('INSERT into  public.meetings_v2 (session_id, session_name, audio_only) VALUES($1, $2, $3)', [sessionId, roomName, 'false'], function(err, result) {
+                        done();
+                        if (err) {
+                            res.end('Error inserting meeting to database');
+                        } else {
+
+                        }
+                    });
+                }
+                // get the session id for the meeting room
+                client.query('SELECT * FROM public.meetings_v2 where session_name = $1', [roomName], function(err, result) {
+                    done();
+                    if (err) {
+                        console.error(err);
+                        res.send("Error " + err);
+                    } else {
+                        sessionId = result.rows[0].session_id;
+                        console.log(sessionId);
+                    }
+                });
+
+            }
+        });
+    });
+
+
+
+    const userName = 'no name';
+
+    // generate a fresh token for this client
+    //const token = opentok.generateToken(sessionId);
+
+
 
 });
 
