@@ -7,14 +7,14 @@
 
     "env": {
 
-        DATABASE_URL:{
-            required: true
+        "DATABASE_URL":{
+            "required": true
         },
-        TOKBOX_API:{
-            required: true
+        "TOKBOX_API":{
+            "required": true
         },
-        TOKBOX_SECRET:{
-            required: true
+        "TOKBOX_SECRET":{
+            "required": true
         }
     }
 }
