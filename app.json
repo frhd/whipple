@@ -3,5 +3,18 @@
     "description": "meetings as usual, just better",
     "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
     "keywords": ["node", "express", "heroku"],
-    "image": "heroku/nodejs"
+    "image": "heroku/nodejs",
+
+    "env": {
+
+        DATABASE_URL:{
+            required: true
+        },
+        TOKBOX_API:{
+            required: true
+        },
+        TOKBOX_SECRET:{
+            required: true
+        }
+    }
 }
