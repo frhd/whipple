@@ -15,12 +15,10 @@ var opentok = new OpenTok(apiKey, apiSecret);
 generateNewSessionID();
 
 
-
-
 function generateNewSessionID() {
     opentok.createSession({
         mediaMode: "routed"
-    }, function(err, session) {
+    }, function (err, session) {
         if (err) throw err;
         app.set('sessionId', session.sessionId);
     });
@@ -42,9 +40,9 @@ app.set('view engine', 'ejs');
 
 // Landing Page: Overview of currently active meetings
 
-app.get('/', function(req, res) {
-    pg.connect(process.env.DATABASE_URL + "?ssl=true", function(err, client, done) {
-        client.query('SELECT * FROM public.meetings_v2', function(err, result) {
+app.get('/', function (req, res) {
+    pg.connect(process.env.DATABASE_URL + "?ssl=true", function (err, client, done) {
+        client.query('SELECT * FROM public.meetings_v2', function (err, result) {
             done();
             if (err) {
                 console.error(err);
@@ -59,12 +57,12 @@ app.get('/', function(req, res) {
 });
 
 // Create new meeting Page
-app.get('/addmeeting', function(req, res) {
+app.get('/addmeeting', function (req, res) {
     res.render('pages/addmeeting');
 });
 
 // Add new meeting to the database
-app.post('/meetings', function(req, res) {
+app.post('/meetings', function (req, res) {
     // generate new Session Id
     generateNewSessionID();
     const sessionId = app.get('sessionId');
@@ -75,8 +73,8 @@ app.post('/meetings', function(req, res) {
         console.log(audioOnly);
 
         // insert into database
-        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-            client.query('INSERT into  public.meetings_v2 (session_id, session_name, audio_only) VALUES($1, $2, $3)', [sessionId, name, audioOnly], function(err, result) {
+        pg.connect(process.env.DATABASE_URL, function (err, client, done) {
+            client.query('INSERT into  public.meetings_v2 (session_id, session_name, audio_only) VALUES($1, $2, $3)', [sessionId, name, audioOnly], function (err, result) {
                 done();
                 if (err) {
                     res.end('Error inserting meeting to database');
@@ -92,11 +90,90 @@ app.post('/meetings', function(req, res) {
     if (typeof sessionId == 'undefined') {
         res.end('Could not generate a new session ID');
     }
-
 });
 
+// A simpler way to create and join a meeting
+// just a roomname is is needed (via url). The session is than created if it not already existed
+// The user name is asked when the user enters the meeting
+app.get('/room/:roomName', function (req, res) {
+    // filter special characters
+    const roomName = req.params.roomName.replace(/[^\w\s]/gi, '');
+    var sessionId;
+
+    // check, if room with that name already exists, otherwise create it in database
+    pg.connect(process.env.DATABASE_URL + "?ssl=true", function (err, client, done) {
+        client.query('SELECT * FROM public.meetings_v2 where session_name = $1', [roomName], function (err, result) {
+            done();
+            if (err) {
+                console.error(err);
+                res.send("Error " + err);
+            } else {
+                // if room does not exits, create it now
+                if (result.rows.length == 0) {
+
+                    // create room
+                    createRoom(roomName);
+
+                }
+                // join the room
+                joinRoomByName(roomName, res);
+            }
+        });
+    });
+});
+
+// creates a room with a given name
+function createRoom(roomName){
+    generateNewSessionID();
+    sessionId = app.get('sessionId');
+    pg.connect(process.env.DATABASE_URL + "?ssl=true", function (err, client, done) {
+        client.query('INSERT into  public.meetings_v2 (session_id, session_name, audio_only) VALUES($1, $2, $3)', [sessionId, roomName, false], function (err, result) {
+            done();
+            if (err) {
+                res.end('Error inserting meeting to database');
+            } else {
+                console.log("Room " +  roomName + " created in database");
+            }
+        });
+    });
+}
+
+// Join room by a given name
+function joinRoomByName(roomName, res){
+    pg.connect(process.env.DATABASE_URL + "?ssl=true", function (err, client, done) {
+        // get session id for room
+        client.query('SELECT * FROM public.meetings_v2 where session_name = $1', [roomName], function (err, result) {
+            done();
+            if (err) {
+                console.error(err);
+                res.send("Error " + err);
+            } else {
+                const sessionId = result.rows[0].session_id;
+                const userName = 'no name';
+                const audioOnly = false;
+
+                // generate a fresh token for this client
+                // console.log("Session ID " + sessionId);
+                // wait for
+                const token = opentok.generateToken(sessionId);
+
+                // join the meeting
+                res.render('pages/meeting', {
+                    sessionName: roomName,
+                    sessionId: sessionId,
+                    userName: userName,
+                    audioOnly: audioOnly,
+                    token: token,
+                    apiKey: apiKey
+                });
+            }
+        });
+    });
+}
+
+
 // Join a meeting
-app.get('/meetings/:sessionId', function(req, res) {
+app.get('/meetings/:sessionId', function (req, res) {
 
     const sessionId = req.params.sessionId;
     const sessionName = req.query.meetingName;
@@ -119,6 +196,6 @@ app.get('/meetings/:sessionId', function(req, res) {
 
 // Actually start app
 // ############################################################################
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
 });

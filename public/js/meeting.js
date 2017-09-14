@@ -15,6 +15,8 @@ const btnAnalyticsDownload = "btn_analytics";
 
 const btnToggleVideo = 'btn_toggle_video';
 
+
+
 // Audio Files
 // ############################################################################
 let talkingSound = new Audio('/res/confirmation1.mp3');
@@ -107,8 +109,9 @@ m.config = {
     maxTalkingTime: 60,
     superpowers: 3,
     extendTalkTimeBy: 20,
-    audioOnly: audioOnly,
-}
+    audioOnly: false
+    //audioOnly: audioOnly // ToDo: decide if audio only is useful at all
+};
 
 // Meeting Tracking / Analytics
 m.analytics = "order;name;seconds\n";
@@ -126,6 +129,34 @@ m.timeCorrection = 0;
 
 
 $(document).ready(function() {
+
+    // get username directly in the meeting
+    // This change is due to the new way to join/create meeting rooms
+    swal({
+            title: "Username",
+            text: "please enter your name",
+            type: "input",
+            showCancelButton: true,
+            closeOnConfirm: true,
+            animation: "slide-from-top",
+            inputPlaceholder: "your name"
+        },
+        function(inputValue){
+            if (inputValue === false) return false;
+
+            if (inputValue === "") {
+                swal.showInputError("You need to enter a name");
+                return false
+            }
+            userName = inputValue;
+
+            // initialize meeting
+            initializeMeeting();
+        });
+
+});
+
+function initializeMeeting(){
     initializeSession();
     console.log("initialized");
 
@@ -139,9 +170,11 @@ $(document).ready(function() {
     // tooltips should disapear when button was clicked
     $('[data-toggle="tooltip"]').tooltip({
         trigger: 'hover'
-    })
+    });
+
 
     // show tips on how to contro, a meeting
+    /*
     swal({
         title: "Getting started",
         text: `Use <i class="
@@ -149,6 +182,9 @@ $(document).ready(function() {
         fa fa-info "></i>`,
         html: true
     });
+    */
+
+
 
     // jquery ui
     $("#draggable-notes").draggable();
@@ -159,7 +195,7 @@ $(document).ready(function() {
 
     // Disable Video Button if it's an audio only meeting
     //$("#" + btnToggleVideo).prop("disabled", true);
-});
+}
 
 
 // Initialize Session
