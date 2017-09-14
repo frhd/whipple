@@ -96,7 +96,6 @@ app.post('/meetings', function (req, res) {
 // just a roomname is is needed (via url). The session is than created if it not already existed
 // The user name is asked when the user enters the meeting
 app.get('/room/:roomName', function (req, res) {
-
     // filter special characters
     const roomName = req.params.roomName.replace(/[^\w\s]/gi, '');
     var sessionId;
@@ -116,34 +115,8 @@ app.get('/room/:roomName', function (req, res) {
                     createRoom(roomName);
 
                 }
-
-                // get session id for room
-                client.query('SELECT * FROM public.meetings_v2 where session_name = $1', [roomName], function (err, result) {
-                    done();
-                    if (err) {
-                        console.error(err);
-                        res.send("Error " + err);
-                    } else {
-                        sessionId = result.rows[0].session_id;
-
-                        const userName = 'no name';
-                        const audioOnly = false;
-
-                        // generate a fresh token for this client
-                        // console.log("Session ID " + sessionId);
-                        const token = opentok.generateToken(sessionId);
-
-                        // join the meeting
-                        res.render('pages/meeting', {
-                            sessionName: roomName,
-                            sessionId: sessionId,
-                            userName: userName,
-                            audioOnly: audioOnly,
-                            token: token,
-                            apiKey: apiKey
-                        });
-                    }
-                });
+                // join the room
+                joinRoomByName(roomName, res);
             }
         });
     });
@@ -151,10 +124,8 @@ app.get('/room/:roomName', function (req, res) {
 
 // creates a room with a given name
 function createRoom(roomName){
-
     generateNewSessionID();
     sessionId = app.get('sessionId');
-    
     pg.connect(process.env.DATABASE_URL + "?ssl=true", function (err, client, done) {
         client.query('INSERT into  public.meetings_v2 (session_id, session_name, audio_only) VALUES($1, $2, $3)', [sessionId, roomName, false], function (err, result) {
             done();
@@ -166,6 +137,40 @@ function createRoom(roomName){
         });
     });
 }
+
+// Join room by a given name
+function joinRoomByName(roomName, res){
+    pg.connect(process.env.DATABASE_URL + "?ssl=true", function (err, client, done) {
+        // get session id for room
+        client.query('SELECT * FROM public.meetings_v2 where session_name = $1', [roomName], function (err, result) {
+            done();
+            if (err) {
+                console.error(err);
+                res.send("Error " + err);
+            } else {
+                const sessionId = result.rows[0].session_id;
+                const userName = 'no name';
+                const audioOnly = false;
+
+                // generate a fresh token for this client
+                // console.log("Session ID " + sessionId);
+                // wait for
+                const token = opentok.generateToken(sessionId);
+
+                // join the meeting
+                res.render('pages/meeting', {
+                    sessionName: roomName,
+                    sessionId: sessionId,
+                    userName: userName,
+                    audioOnly: audioOnly,
+                    token: token,
+                    apiKey: apiKey
+                });
+            }
+        });
+    });
+}
+
 
 // Join a meeting
 app.get('/meetings/:sessionId', function (req, res) {
