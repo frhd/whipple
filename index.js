@@ -111,16 +111,10 @@ app.get('/room/:roomName', function (req, res) {
             } else {
                 // if room does not exits, create it now
                 if (result.rows.length == 0) {
-                    generateNewSessionID();
-                    sessionId = app.get('sessionId');
-                    client.query('INSERT into  public.meetings_v2 (session_id, session_name, audio_only) VALUES($1, $2, $3)', [sessionId, roomName, false], function (err, result) {
-                        done();
-                        if (err) {
-                            res.end('Error inserting meeting to database');
-                        } else {
 
-                        }
-                    });
+                    // create room
+                    createRoom(roomName);
+
                 }
 
                 // get session id for room
@@ -153,12 +147,25 @@ app.get('/room/:roomName', function (req, res) {
             }
         });
     });
-
-
-
-
-
 });
+
+// creates a room with a given name
+function createRoom(roomName){
+
+    generateNewSessionID();
+    sessionId = app.get('sessionId');
+    
+    pg.connect(process.env.DATABASE_URL + "?ssl=true", function (err, client, done) {
+        client.query('INSERT into  public.meetings_v2 (session_id, session_name, audio_only) VALUES($1, $2, $3)', [sessionId, roomName, false], function (err, result) {
+            done();
+            if (err) {
+                res.end('Error inserting meeting to database');
+            } else {
+                console.log("Room " +  roomName + " created in database");
+            }
+        });
+    });
+}
 
 // Join a meeting
 app.get('/meetings/:sessionId', function (req, res) {
