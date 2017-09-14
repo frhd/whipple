@@ -97,8 +97,8 @@ app.post('/meetings', function (req, res) {
 // The user name is asked when the user enters the meeting
 app.get('/room/:roomName', function (req, res) {
 
-    const roomName = req.params.roomName;
-    // session id will be pulled from database
+    // filter special characters
+    const roomName = req.params.roomName.replace(/[^\w\s]/gi, '');
     var sessionId;
 
     // check, if room with that name already exists, otherwise create it in database
