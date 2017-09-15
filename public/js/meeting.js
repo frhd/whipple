@@ -106,7 +106,8 @@ let m = new Meeting();
 m.queue = [];
 m.talkerEndTime = null;
 m.config = {
-    maxTalkingTime: 60,
+    maxTalkingTime: 180,
+    talkTimeAfterNewUserInQueue: 20,
     superpowers: 3,
     extendTalkTimeBy: 20,
     audioOnly: false
@@ -342,6 +343,14 @@ function signalTalkAction() {
     });
 }
 
+// This directly lets you talk for the given amount of time, independet of the queue
+function signalTalkActionManual(){
+    console.log("You dispatched a signalLetMeTalkManual");
+    session.signal({
+        data: "talkActionManual#" + m.myPublisher.stream.streamId + "#" + m.config.talkTimeAfterNewUserInQueue
+    });
+}
+
 // Fired if you click the done talking button
 function signalDoneTalking() {
     //log("You dispatched a signalDoneTalking");
@@ -428,6 +437,12 @@ function receiveSignal(event) {
             console.log("LetMeTalk");
             handleTalkAction(senderStreamId);
             break;
+        case "talkActionManual":
+            var senderStreamId = res[1];
+            var amountSeconds = res[2];
+            console.log("LetMeTalkManual");
+            handleTalkActionManual(senderStreamId, amountSeconds);
+            break;
         case "doneTalking":
             var senderStreamId = res[1];
             //handleDoneTalking(senderStreamId);
@@ -501,6 +516,16 @@ function handleTalkAction(senderStreamId) {
         }
 
         signalStatusUpdate(queue);
+    }
+}
+
+function handleTalkActionManual(senderStreamId, amountSeconds) {
+    if (m.amIMaster()) {
+        // change talking endtime of calling user
+        let talkingStartedAt = new Date().getTime();
+        m.talkerEndTime = talkingStartedAt + (1000 * amountSeconds);
+        // signal the upadate to everyone
+        signalStatusUpdate(m.queue);
     }
 }
 
@@ -1053,7 +1078,23 @@ function uiTimeToEnd() {
             $("#" + talkTimeLeftUi).html(`<i class="fa fa-hourglass" aria-hidden="true"></i>`);
             // if you are the talker, stop now
             if (m.queue[0] == m.myPublisher.stream.streamId) {
-                signalTalkAction();
+
+                // only stop talking if there is someone in the queue, else keep talking
+                if(m.queue.length > 1){
+                    // if there already was somebody in the queue waiting
+                    // ToDo: find a better way to descriminate here on the queue status
+                    if(secondsLeft > -1){
+                        signalTalkAction();
+                    }
+                    // else: someone got in line while you were already over your talk time
+                    // now you have x seconds left before the next one gets to talk
+                    else{
+                        // signal a new talk action with manually set time
+                        // this will always get you to talk for the set amount of time while ignoring the current
+                        // queue status. Here m.config.talkTimeAfterNewUserInQueue is used as time amount
+                        signalTalkActionManual();
+                    }
+                }
             }
         }
     } else {
