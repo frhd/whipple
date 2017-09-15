@@ -48,6 +48,9 @@ let session;
 // used for ui adjusting
 let prevTalker;
 
+// used for managing talk time warning messages (could be solved nicer)
+let alreadyWarnedAt;
+
 
 class Meeting {
     constructor() {
@@ -108,6 +111,7 @@ m.talkerEndTime = null;
 m.config = {
     maxTalkingTime: 180,
     talkTimeAfterNewUserInQueue: 20,
+    youTalkedForMessageInterval: 60,
     superpowers: 3,
     extendTalkTimeBy: 20,
     audioOnly: false
@@ -319,14 +323,9 @@ function initializeSession() {
 
     }
 
-
-
-
     session.connect(token, publishStream);
     // Which function to call if a signal is received
     session.on("signal", receiveSignal);
-
-
 
 }
 
@@ -619,6 +618,8 @@ function handleStatusUpdate(_queueJSON, _talkerEndTime, _masterTime) {
 
     // if you are the one that wants to talk
     if (talksNow == myId && prevTalker != myId) {
+        // create timestamp to known when your talking started
+        m.talkerStartedAt = Date.now();
         m.myPublisher.publishAudio(true)
             // warn user that its his turn now (via audio)
             //console.log("talkingSound")
@@ -626,6 +627,8 @@ function handleStatusUpdate(_queueJSON, _talkerEndTime, _masterTime) {
     } else if (prevTalker == myId && talksNow != myId) {
         m.myPublisher.publishAudio(false);
         doneTalkingSound.play();
+        // reset global variable for managing talk time warnings
+        alreadyWarnedAt = null;
         //console.log("donetalkingSound")
     } else {
         // if someone else queued in
@@ -1061,6 +1064,7 @@ window.setInterval(function() {
 
 function uiTimeToEnd() {
     let secondsLeft = Math.floor(((m.talkerEndTime - m.timeCorrection) - Date.now()) / 1000);
+
     if (m.queue.length > 0) {
         //sconsole.log(Math.floor(secondsLeft) + " seconds left");
         $("#" + talkTimeLeftUi).html(secondsLeft);
@@ -1070,6 +1074,27 @@ function uiTimeToEnd() {
             // alarm if you are the talker or the next one in line
             if ((m.queue[0] == m.myPublisher.stream.streamId) || (m.queue[1] == m.myPublisher.stream.streamId)) {
                 alarmSound.play();
+            }
+        }
+
+        // if you are the talker, show reminders on how long you are already talking
+        if (m.queue[0] == m.myPublisher.stream.streamId) {
+            let talkedFor = Math.floor((Date.now() - m.talkerStartedAt)/1000);
+            if(talkedFor % m.config.youTalkedForMessageInterval == 0 && talkedFor > 0){
+                // make sure warning is only showed once per timestamp
+                if(alreadyWarnedAt != talkedFor){
+
+                    // show warning about current talk time that automatically disapears
+                    swal({
+                        title: 'Watch your time!',
+                        type: 'info',
+                        // language=HTML
+                        text: 'You are now talking for ' + talkedFor + ' seconds already...',
+                        timer: 2500
+                    })
+
+                    alreadyWarnedAt = talkedFor;
+                }
             }
         }
 
