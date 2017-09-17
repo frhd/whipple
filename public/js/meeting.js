@@ -109,7 +109,7 @@ let m = new Meeting();
 m.queue = [];
 m.talkerEndTime = null;
 m.config = {
-    maxTalkingTime: 180,
+    maxTalkingTime: 20,
     talkTimeAfterNewUserInQueue: 20,
     youTalkedForMessageInterval: 60,
     superpowers: 3,
@@ -520,11 +520,14 @@ function handleTalkAction(senderStreamId) {
 
 function handleTalkActionManual(senderStreamId, amountSeconds) {
     if (m.amIMaster()) {
-        // change talking endtime of calling user
-        let talkingStartedAt = new Date().getTime();
-        m.talkerEndTime = talkingStartedAt + (1000 * amountSeconds);
-        // signal the upadate to everyone
-        signalStatusUpdate(m.queue);
+        // only if calling user ist current talker
+        if (senderStreamId == m.queue[0]){
+            // change talking endtime of calling user
+            let talkingStartedAt = new Date().getTime();
+            m.talkerEndTime = talkingStartedAt + (1000 * amountSeconds);
+            // signal the upadate to everyone
+            signalStatusUpdate(m.queue);
+        }
     }
 }
 
@@ -1072,7 +1075,7 @@ function uiTimeToEnd() {
         // if you have 10 seconds left, play warning sound
         if (secondsLeft == 10) {
             // alarm if you are the talker or the next one in line
-            if ((m.queue[0] == m.myPublisher.stream.streamId) || (m.queue[1] == m.myPublisher.stream.streamId)) {
+            if (((m.queue[0] == m.myPublisher.stream.streamId) && m.queue.length > 1) || (m.queue[1] == m.myPublisher.stream.streamId)) {
                 alarmSound.play();
             }
         }
