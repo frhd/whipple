@@ -109,7 +109,7 @@ let m = new Meeting();
 m.queue = [];
 m.talkerEndTime = null;
 m.config = {
-    maxTalkingTime: 120,
+    maxTalkingTime: 90,
     talkTimeAfterNewUserInQueue: 20,
     youTalkedForMessageInterval: 60,
     superpowers: 3,
