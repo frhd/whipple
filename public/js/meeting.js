@@ -375,6 +375,13 @@ function signalExpressDisagreement() {
     });
 }
 
+// Signal that teh speaker should get back on track
+function signalGetBackOnTrack() {
+    session.signal({
+        data: "getBackOnTrack#"
+    });
+}
+
 // Signal status of current talkingQueue (used to inform new users on the status)
 // Only users with a empty Queue should react to this signal
 function signalQueueStatus() {
@@ -460,6 +467,9 @@ function receiveSignal(event) {
         case "expressDisagreement":
             var senderStreamId = res[1];
             handleDisagreement(senderStreamId);
+            break;
+        case "getBackOnTrack":
+            handleGetBackOnTrack(senderStreamId);
             break;
         case "queueStatus":
             var talksNow = res[1];
@@ -694,6 +704,15 @@ function handleDisagreement(senderStreamId) {
     html = `<span id="name-overblend" style="background-color: #245a7c; opacity: 0.0; color: white; border-radius: 3px;">&nbsp${getStreamName(senderStreamId)}&nbsp</span>`;
     blendOver("talkerPlaceholderContent", html, "name-overblend", getStreamName(senderStreamId).length + 3);
 
+}
+
+function handleGetBackOnTrack(){
+    notificationSound.play();
+    let html = `<i class="fa fa-road" id="animate-getbackontrack" aria-hidden="true" style="opacity: 0.0; color: #ffd89b;"></i>`;
+    blendOver("talkerPlaceholderContent", html, "animate-getbackontrack", 1);
+
+    html = `<span id="text-overblend" style="background-color: #245a7c; opacity: 0.0; color: white; border-radius: 3px;">&nbsp get back on track &nbsp</span>`;
+    blendOver("talkerPlaceholderContent", html, "text-overblend", 20);
 }
 
 // visualize, that someone used a superpower
@@ -1012,6 +1031,11 @@ $("#btn_agreement").mouseup(function() {
 });
 $("#btn_disagreement").click(signalExpressDisagreement);
 $("#btn_disagreement").mouseup(function() {
+    $(this).blur();
+});
+
+$("#btn_getbackontrack").click(signalGetBackOnTrack);
+$("#btn_getbackontrack").mouseup(function() {
     $(this).blur();
 });
 
