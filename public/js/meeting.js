@@ -137,8 +137,10 @@ $(document).ready(function() {
 
     // get username directly in the meeting
     // This change is due to the new way to join/create meeting rooms
+
     swal({
             title: "Username",
+            type: "info",
             text: "please enter your name",
             type: "input",
             showCancelButton: true,
@@ -148,7 +150,6 @@ $(document).ready(function() {
         },
         function(inputValue){
             if (inputValue === false) return false;
-
             if (inputValue === "") {
                 swal.showInputError("You need to enter a name");
                 return false
@@ -158,6 +159,7 @@ $(document).ready(function() {
             // initialize meeting
             initializeMeeting();
         });
+
 
 });
 
@@ -1007,11 +1009,11 @@ $("#btn_donetalking").click(function() {
 $("#btn_agreement").click(signalExpressAgreement);
 $("#btn_agreement").mouseup(function() {
     $(this).blur();
-})
+});
 $("#btn_disagreement").click(signalExpressDisagreement);
 $("#btn_disagreement").mouseup(function() {
     $(this).blur();
-})
+});
 
 // Meeting Analytics Download Button
 btnAnalyticsDownload
@@ -1130,6 +1132,16 @@ function uiTimeToEnd() {
     }
 }
 
+// Meeting Link Sharing
+// ############################################################################
+$("#room-link").click(function() {
+    var clipboard = new Clipboard('#room-link', {
+        text: function() {
+            return window.location.href ;
+        }
+    });
+    $("#room-link").css("color", "#e4c897");
+});
 
 
 // HTML Templating
