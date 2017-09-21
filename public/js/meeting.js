@@ -995,7 +995,7 @@ $("#btn_leave").click(function() {
                 swal.showInputError("You need to enter a name");
                 return false
             }
-            window.location.href = "/";
+            window.location.href = "http://www.whipple.io";
         });
 
     //window.location.href = "/";
