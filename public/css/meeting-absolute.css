@@ -283,16 +283,27 @@ body{
 }
 
 #draggable-notes { 
-    width: 320px; padding: 0.5em;
+    width: 320px;
+    padding: 0.25em;
     position: absolute;
-    bottom: 20px; 
-}
-
-/* make notes invisible by default */
-
-#draggable-notes { 
+    bottom: 5vh;
     display: none;
 }
+
+#draggable-etherpad {
+    padding: 0.25em;
+    position: absolute;
+    top: 20vh;
+    left: 5vw;
+    display: none;
+}
+#etherpad-container{
+    height: 100%;
+    width: 100%;
+    min-width: 200px;
+    min-height: 150px;
+}
+
 
 #room-link:hover{
     color: #20587c;

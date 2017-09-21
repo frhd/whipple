@@ -192,9 +192,17 @@ function initializeMeeting(){
     */
 
 
+    // Set Iframe URL for Etherpad
+    $("#etherpad-iframe").attr("src","https://whipple-etherpad.herokuapp.com/p/"+ sessionName +"?showControls=true&showChat=true&showLineNumbers=true&useMonospaceFont=false");
 
     // jquery ui
     $("#draggable-notes").draggable();
+    //$("#notes-container").resizable();
+    $("#etherpad-container").resizable();
+    $("#draggable-etherpad").draggable();
+
+
+
 
 
     // Ui sizing stuff
@@ -1071,7 +1079,6 @@ function downloadAnalytics() {
 }
 
 // note related click events
-
 $("#btn_close_notes").click(function() {
     // make notes invisible
     $("#draggable-notes").css("display", "none");
@@ -1080,6 +1087,17 @@ $("#btn_close_notes").click(function() {
 $("#show_notes").click(function() {
     $("#draggable-notes").css("display", "inline");
 });
+
+// etherpad related click events
+$("#btn_close_etherpad").click(function() {
+    // make notes invisible
+    $("#draggable-etherpad").css("display", "none");
+});
+
+$("#show_etherpad").click(function() {
+    $("#draggable-etherpad").css("display", "inline");
+});
+
 
 // Interval Functions that run all the time to update stuff like 
 // left talking time or total meeting time

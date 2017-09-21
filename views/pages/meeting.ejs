@@ -160,6 +160,7 @@
               <div class="dropdown-menu">
                     
                    <a class="dropdown-item" id="show_notes">show notes</a>
+                   <a class="dropdown-item" id="show_etherpad">show etherpad</a>
 
               </div>
             </div>
@@ -280,19 +281,41 @@
 
   
 
-    <div id="draggable-notes" class="ui-widget-content">
+    <div id="draggable-notes">
         <div class="card">
           <div class="card-header">
             <span>Notes</span><button type="button" class="btn btn-secondary btn-sm" id="btn_close_notes" style="float:right;">x</button>
           </div>
-          <div class="card-block">
+          <div class="card-block" id="notes-container">
             <div class="card-text">
                 <textarea id="notes"rows="3" cols="30">
                 </textarea>
+
+                <!-- Etherpad Test -->
+                <!--<iframe name='embed_readwrite' src='https://whipple-etherpad.herokuapp.com/p/tada?showControls=true&showChat=true&showLineNumbers=true&useMonospaceFont=false' width=200 height=250></iframe>-->
+
             </div>
           </div>
         </div>  
     </div>
+
+
+     <div id="draggable-etherpad" class="ui-widget-content">
+         <div class="card">
+             <div class="card-header">
+                 <span>Shared Text and Chat</span><button type="button" class="btn btn-secondary btn-sm" id="btn_close_etherpad" style="float:right;">x</button>
+             </div>
+             <div class="card-block" id="etherpad-container">
+
+                     <!-- Etherpad Test -->
+                     <!--<iframe name='embed_readwrite' src='http://whipple-etherpad.herokuapp.com/p/test?showControls=true&showChat=true&showLineNumbers=true&useMonospaceFont=false' width="100%" height="100%"</iframe>-->
+                     <iframe name='embed_readwrite' id="etherpad-iframe" src='' width="100%" height="100%"></iframe>
+
+
+             </div>
+         </div>
+     </div>
+
 
 
     <% include ../partials/footer.ejs %>
