@@ -947,6 +947,11 @@ $("#btn_toggle_video").mouseup(function() {
 })
 
 
+// Info Modal Button
+$("#btn_infoModal").mouseup(function() {
+    $(this).blur();
+})
+
 
 // Send a let me talk signal
 $("#btn_letmetalk").click(signalTalkAction);
