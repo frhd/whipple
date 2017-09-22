@@ -944,13 +944,13 @@ $("#btn_toggle_video").click(function() {
 // remove focus from button after click
 $("#btn_toggle_video").mouseup(function() {
     $(this).blur();
-})
+});
 
 
 // Info Modal Button
 $("#btn_infoModal").mouseup(function() {
     $(this).blur();
-})
+});
 
 
 // Send a let me talk signal
