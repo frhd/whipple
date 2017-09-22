@@ -111,7 +111,7 @@ m.talkerEndTime = null;
 m.config = {
     maxTalkingTime: 90,
     talkTimeAfterNewUserInQueue: 20,
-    youTalkedForMessageInterval: 60,
+    youTalkedForMessageInterval: 999,
     superpowers: 3,
     extendTalkTimeBy: 20,
     audioOnly: false
