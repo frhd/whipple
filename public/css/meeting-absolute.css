@@ -13,9 +13,6 @@ body{
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin: 0;
-    background-image: url("http://whipple.io/wp-content/uploads/2017/09/whipple_logo_svg.svg");
-    background-position: 92% 8%;
-    background-size: 25%;
     width: 100%;
     height: 100%;
     font-family: Ubuntu, sans-serif;
@@ -65,13 +62,16 @@ body{
 
 #rightPanel{
     position:absolute;
-    /*left:235px;*/
     left: 30%;
-    top:0px;
+    top: 0px;
     right:0px;
-    bottom:0px;
+    bottom: 0px;
     margin-left: 15px;
     padding-top: 5px;
+    background-repeat: no-repeat;
+    background-image: url("http://whipple.io/wp-content/uploads/2017/09/whipple_logo_svg.svg");
+    background-position: center 2%;
+    background-size: 50%;
 }
 #parent{
     margin-top:65px;
