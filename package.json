@@ -1,31 +1,32 @@
 {
-    "name": "whipple",
-    "version": "0.0.1",
-    "description": "managed voice-and video meetings",
-    "engines": {
-        "node": "6.11.1"
-    },
-    "main": "index.js",
-    "scripts": {
-        "start": "node index.js",
-        "test": "node test.js"
-    },
-    "dependencies": {
-        "body-parser": "^1.17.2",
-        "cool-ascii-faces": "1.3.4",
-        "ejs": "2.5.6",
-        "express": "4.15.2",
-        "pg": "6.x",
-        "opentok": "latest"
-    },
-    "devDependencies": {
-        "request": "^2.81.0",
-        "tape": "^4.7.0"
-    },
-    "keywords": [
-        "node",
-        "heroku",
-        "express"
-    ],
-    "license": "MIT"
+  "name": "whipple",
+  "version": "0.0.1",
+  "description": "managed voice-and video meetings",
+  "engines": {
+    "node": "6.11.1"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "clipboard": "^1.7.1",
+    "cool-ascii-faces": "1.3.4",
+    "ejs": "2.5.6",
+    "express": "4.15.2",
+    "opentok": "latest",
+    "pg": "6.x"
+  },
+  "devDependencies": {
+    "request": "^2.81.0",
+    "tape": "^4.7.0"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
 }

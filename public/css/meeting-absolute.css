@@ -13,17 +13,27 @@ body{
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin: 0;
-    background: linear-gradient(to  bottom right, #19547b, #eccd98); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+    width: 100%;
+    height: 100%;
+    font-family: Ubuntu, sans-serif;
 }
+
+.badge-warning {
+    background-color: #ec008c;
+}
+
+.bg-inverse {
+    background-color: #92278f !important;
+}
+
 
 #footer{
     height: 80px;
     position: absolute;
-    bottom: 0;
+    bottom: 20px;
     width: 100%;
-    /*background-color: #D3D3D3;*/
     text-align: center;
+    /* background-color: #757575; */
 }
 
 #scrollContainer{
@@ -33,72 +43,71 @@ body{
 }
 
 #leftPanel{
-    /*background-color: skyblue;*/
-    /*background-color: rgba( 236, 239, 241,0.3);*/
-    padding-top: 10px;
+    /* background-color: skyblue; */
+    background-color: rgba( 255, 256, 255,0.8);
+    padding-top: 20px;
     position:absolute;
     /*width: 235px;*/
-    width: 30%;
+    width: 25%;
     left:0px;
-    top:0px;
-    bottom:0px;
+    top: 40px;
+    bottom: 40px;
     overflow: auto;
-    border: 6px solid rgba(255,255,255, 0.7);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+    border-radius: 2px;
 }
 
 
 
 #rightPanel{
-    /*background-color: lightgrey;*/
-    /*background-color:  rgba( 236, 239, 241,0.3);*/
-    position:absolute; 
-    /*left:235px;*/
+    position:absolute;
     left: 30%;
-    top:0px;
+    top: 0px;
     right:0px;
-    bottom:0px;
+    bottom: 0px;
     margin-left: 15px;
-    /*border: 1px solid black;*/
-    border: 6px solid rgba(255,255,255, 0.7);
     padding-top: 5px;
+    background-repeat: no-repeat;
+    /*background-image: url("http://whipple.io/wp-content/uploads/2017/09/whipple_logo_svg.svg");*/
+    background-position: center 2%;
+    background-size: 50%;
 }
 #parent{
     margin-top:65px;
     margin-bottom:80px;
     margin-left: 5px;
     margin-right: 5px;
-    position:absolute; 
-    top:0px; 
+    position:absolute;
+    top:0px;
     left:0px;
-    right:0px; 
+    right:0px;
     bottom:0px;
     /*border: 1px solid blue;*/
 }
 
 /* add margins at the sides on wide screens */
 @media only screen and (orientation:landscape) {
-    #parent { 
+    #parent {
         margin-left: 10%;
         margin-right: 10%;
     }
 
     #leftPanel{
-    
-        border: 9px solid rgba(255,255,255, 0.3);
-        border-radius: 5px;
+        /* border: 9px solid rgba(255,255,255, 0.3); */
+        /* border-radius: 5px; */
     }
     #rightPanel{
-        
-        border: 9px solid rgba(255,255,255, 0.3);
-        border-radius: 5px;
+        /* border: 9px solid rgba(255,255,255, 0.3); */
+        /* border-radius: 5px; */
     }
 
-} 
+}
 
 .aligner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .aligner2{
@@ -109,28 +118,22 @@ body{
 /* Stream containers */
 
 .smallStreamContainer{
-    max-width: 95%;
-    width: 200px;
+    max-width: 100%;
+    width: 16rem;
     margin: auto;
-    margin-bottom: 10px;
-    padding: 5px;
-    border: 1px solid #003153;
+    margin-bottom: 15px;
+    /* padding: 5px; */
+    /* border: 1px solid #003153; */
     background-color: white;
-    border-radius: 4px;
+    border-radius: 2px;
     box-shadow: 0px 0px 5px #70716f;
-
 }
 
 .smallStreamContent{
-    height: 100px;
-
+    height: 12rem;
 }
 
-.smallStreamInfo{
-
-    
-    text-align: center;
-}
+.smallStreamInfo{text-align: center;}
 
 .bigStreamContainer{
     max-width: 95%;
@@ -138,12 +141,11 @@ body{
     /*margin: auto;*/
     margin-bottom: 5px;
     padding: 8px;
-    border: 3px solid #808B96;
     background-color: white;
-    border-radius: 6px;
-    box-shadow: 0px 0px 8px white;
     overflow: hidden;
-
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+    border-radius: 2px;
 }
 
 .bigStreamContent{
@@ -152,7 +154,7 @@ body{
 }
 
 .bigStreamInfo{
-    
+
     text-align: center;
 }
 
@@ -168,12 +170,12 @@ body{
 
 #queueUi{
     /*border: 1px solid black;*/
-    margin-top: 3px;
+    margin-top: 2px;
     width: 100%;
     padding: 5px;
-    background-color: #4e7282;  
+    background-color: #92278f;
     color: white;
-    border-radius: 3px;
+    border-radius: 2px;
     text-align:left;
 }
 #queueUiTitle{
@@ -200,17 +202,18 @@ body{
 
 #timeLeft{
     /*border: 1px solid black;*/
-    background-color: #4e7282;
-    border-radius: 3px;
+    background-color: #ec008c;
+    border-radius: 2px;
     text-align: center;
     margin-bottom: 5px;
     color: white;
-    
+    font-size: larger;
 }
 
 .streamYou{
-    font-weight: bold;
-    color:#4e7282;
+    /* font-weight: bold; */
+    font-family: Ubuntu, sans-serif;
+    color: #92278f;
 }
 
 .btn-special{
@@ -231,17 +234,17 @@ body{
 
 .rotate:hover
 {
-        transition:all 0.5s ease;
-        -webkit-transform: rotateZ(-360deg);
-        -ms-transform: rotateZ(-360deg);
-        transform: rotateZ(-360deg);
+    transition:all 0.5s ease;
+    -webkit-transform: rotateZ(-360deg);
+    -ms-transform: rotateZ(-360deg);
+    transform: rotateZ(-360deg);
 }
 
 #audioMeter{
     position: absolute;
     display: none;
     z-index: 1;
-   
+
 }
 
 /*
@@ -251,7 +254,7 @@ body{
 */
 
 #btn_letmetalk{
-    color: #228B22;
+    color: #92278f;
 }
 
 
@@ -265,10 +268,10 @@ body{
 }
 
 @media (max-width: 500px) {
-  .btn-responsive {
-    padding-left:10px !important;
-    padding-right:10px !important;
-  }
+    .btn-responsive {
+        padding-left:10px !important;
+        padding-right:10px !important;
+    }
 }
 
 @media (min-width: 1000px){
@@ -282,14 +285,39 @@ body{
     color: red;
 }
 
-#draggable-notes { 
+#draggable-notes {
     width: 320px; padding: 0.5em;
     position: absolute;
-    bottom: 20px; 
+    bottom: 20px;
 }
 
 /* make notes invisible by default */
 
-#draggable-notes { 
+#draggable-notes {
     display: none;
+}
+
+.btn-secondary {
+    color: #292b2c;
+    background-color: #eceeef;
+    border-color: #fff;
+}
+
+#draggable-etherpad {
+    padding: 0.25em;
+    position: absolute;
+    top: 20vh;
+    left: 5vw;
+    display: none;
+}
+#etherpad-container{
+    height: 100%;
+    width: 100%;
+    min-width: 200px;
+    min-height: 150px;
+}
+
+
+#room-link:hover{
+    color: #20587c;
 }

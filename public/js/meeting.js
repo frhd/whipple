@@ -111,7 +111,7 @@ m.talkerEndTime = null;
 m.config = {
     maxTalkingTime: 90,
     talkTimeAfterNewUserInQueue: 20,
-    youTalkedForMessageInterval: 60,
+    youTalkedForMessageInterval: 999,
     superpowers: 3,
     extendTalkTimeBy: 20,
     audioOnly: false
@@ -137,8 +137,10 @@ $(document).ready(function() {
 
     // get username directly in the meeting
     // This change is due to the new way to join/create meeting rooms
+
     swal({
             title: "Username",
+            type: "info",
             text: "please enter your name",
             type: "input",
             showCancelButton: true,
@@ -148,7 +150,6 @@ $(document).ready(function() {
         },
         function(inputValue){
             if (inputValue === false) return false;
-
             if (inputValue === "") {
                 swal.showInputError("You need to enter a name");
                 return false
@@ -158,6 +159,7 @@ $(document).ready(function() {
             // initialize meeting
             initializeMeeting();
         });
+
 
 });
 
@@ -190,9 +192,17 @@ function initializeMeeting(){
     */
 
 
+    // Set Iframe URL for Etherpad
+    $("#etherpad-iframe").attr("src","https://whipple-etherpad.herokuapp.com/p/"+ sessionName +"?showControls=true&showChat=true&showLineNumbers=true&useMonospaceFont=false");
 
     // jquery ui
     $("#draggable-notes").draggable();
+    //$("#notes-container").resizable();
+    $("#etherpad-container").resizable();
+    $("#draggable-etherpad").draggable();
+
+
+
 
 
     // Ui sizing stuff
@@ -373,6 +383,13 @@ function signalExpressDisagreement() {
     });
 }
 
+// Signal that teh speaker should get back on track
+function signalGetBackOnTrack() {
+    session.signal({
+        data: "getBackOnTrack#"
+    });
+}
+
 // Signal status of current talkingQueue (used to inform new users on the status)
 // Only users with a empty Queue should react to this signal
 function signalQueueStatus() {
@@ -458,6 +475,9 @@ function receiveSignal(event) {
         case "expressDisagreement":
             var senderStreamId = res[1];
             handleDisagreement(senderStreamId);
+            break;
+        case "getBackOnTrack":
+            handleGetBackOnTrack(senderStreamId);
             break;
         case "queueStatus":
             var talksNow = res[1];
@@ -694,6 +714,15 @@ function handleDisagreement(senderStreamId) {
 
 }
 
+function handleGetBackOnTrack(){
+    notificationSound.play();
+    let html = `<i class="fa fa-road" id="animate-getbackontrack" aria-hidden="true" style="opacity: 0.0; color: #ffd89b;"></i>`;
+    blendOver("talkerPlaceholderContent", html, "animate-getbackontrack", 1);
+
+    html = `<span id="text-overblend" style="background-color: #245a7c; opacity: 0.0; color: white; border-radius: 3px;">&nbsp get back on track &nbsp</span>`;
+    blendOver("talkerPlaceholderContent", html, "text-overblend", 20);
+}
+
 // visualize, that someone used a superpower
 function visualizeSuperpowerUse(senderStreamId, userQueuePosition) {
     console.log(getStreamName(senderStreamId) + " used a Superpower");
@@ -915,8 +944,13 @@ $("#btn_toggle_video").click(function() {
 // remove focus from button after click
 $("#btn_toggle_video").mouseup(function() {
     $(this).blur();
-})
+});
 
+
+// Info Modal Button
+$("#btn_infoModal").mouseup(function() {
+    $(this).blur();
+});
 
 
 // Send a let me talk signal
@@ -966,7 +1000,7 @@ $("#btn_leave").click(function() {
                 swal.showInputError("You need to enter a name");
                 return false
             }
-            window.location.href = "/";
+            window.location.href = "http://www.whipple.io";
         });
 
     //window.location.href = "/";
@@ -1007,11 +1041,16 @@ $("#btn_donetalking").click(function() {
 $("#btn_agreement").click(signalExpressAgreement);
 $("#btn_agreement").mouseup(function() {
     $(this).blur();
-})
+});
 $("#btn_disagreement").click(signalExpressDisagreement);
 $("#btn_disagreement").mouseup(function() {
     $(this).blur();
-})
+});
+
+$("#btn_getbackontrack").click(signalGetBackOnTrack);
+$("#btn_getbackontrack").mouseup(function() {
+    $(this).blur();
+});
 
 // Meeting Analytics Download Button
 btnAnalyticsDownload
@@ -1045,7 +1084,6 @@ function downloadAnalytics() {
 }
 
 // note related click events
-
 $("#btn_close_notes").click(function() {
     // make notes invisible
     $("#draggable-notes").css("display", "none");
@@ -1054,6 +1092,17 @@ $("#btn_close_notes").click(function() {
 $("#show_notes").click(function() {
     $("#draggable-notes").css("display", "inline");
 });
+
+// etherpad related click events
+$("#btn_close_etherpad").click(function() {
+    // make notes invisible
+    $("#draggable-etherpad").css("display", "none");
+});
+
+$("#show_etherpad").click(function() {
+    $("#draggable-etherpad").css("display", "inline");
+});
+
 
 // Interval Functions that run all the time to update stuff like 
 // left talking time or total meeting time
@@ -1130,6 +1179,16 @@ function uiTimeToEnd() {
     }
 }
 
+// Meeting Link Sharing
+// ############################################################################
+$("#room-link").click(function() {
+    var clipboard = new Clipboard('#room-link', {
+        text: function() {
+            return window.location.href ;
+        }
+    });
+    $("#room-link").css("color", "#e4c897");
+});
 
 
 // HTML Templating
