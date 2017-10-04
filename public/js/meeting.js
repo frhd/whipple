@@ -52,6 +52,8 @@ let prevTalker;
 let alreadyWarnedAt;
 
 
+
+
 class Meeting {
     constructor() {
         this.users = [];
@@ -114,7 +116,8 @@ m.config = {
     youTalkedForMessageInterval: 999,
     superpowers: 3,
     extendTalkTimeBy: 20,
-    audioOnly: false
+    audioOnly: false,
+    maxUsersPerRoom: 8
     //audioOnly: audioOnly // ToDo: decide if audio only is useful at all
 };
 
@@ -158,16 +161,18 @@ $(document).ready(function() {
 
             // initialize meeting
             initializeMeeting();
+
         });
 
 
 });
 
 function initializeMeeting(){
+
     initializeSession();
     console.log("initialized");
 
-    // disable all Buttons for so that nobody can do stuff befor the everything is up and running
+    // disable all Buttons for so that nobody can do stuff before the everything is up and running
     $('.btn-group button').attr('disabled', true);
 
 
@@ -240,7 +245,7 @@ function initializeSession() {
             insertMode: 'append',
             width: '100%',
             height: '100%',
-            fitMode: 'contain',
+            fitMode: 'contain'
 
         }, handleError);
 
@@ -316,26 +321,46 @@ function initializeSession() {
     });
 
     function publishStream() {
+
         session.publish(myPublisher).on("streamCreated", function(event) {
+            // check if room is already full
+            // it's not nice to kick a user out after he entered his name, but is is for now the easiest way
+            console.log("total users " + m.getUsers().length);
+            if(m.getUsers().length >=  m.config.maxUsersPerRoom){
+
+                swal({
+                        title: "Sorry...",
+                        text: "This room is already at max capacity, please choose a different room",
+                        type: "error",
+                        showCancelButton: false,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "ok",
+                        closeOnConfirm: false
+                    },
+                    function(){
+                        window.location.replace("http://whipple.io");
+                    });
+            }
+
             //log(myUserName + " started publishing Stream " + myPublisher.stream.streamId);
             // enter meeting with audio turned off
             myPublisher.publishAudio(false);
             myPublisher.publishVideo(!m.config.audioOnly);
             m.addUser(myPublisher.stream);
 
-
             // correct IDs of publisher (overwrite defaults)
             $('#SideStreamContentdefault').attr('id', 'SideStreamContent' + myPublisher.stream.streamId);
             $('#SideStreamContainerdefault').attr('id', 'SideStreamContainer' + myPublisher.stream.streamId);
             // enable buttons
             $('.btn-group button').attr('disabled', false);
-        });
 
+        });
     }
 
     session.connect(token, publishStream);
     // Which function to call if a signal is received
     session.on("signal", receiveSignal);
+
 
 }
 
