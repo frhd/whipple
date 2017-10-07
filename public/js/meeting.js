@@ -810,13 +810,11 @@ function handleToggleAfk(senderStreamId){
 
 // used when joining a session to get correct current afk status
 function initializeAfkUi(){
-    var i;
-    var streamId;
-    for (i = 0; i < m.afkUsers.length; ++i) {
-        streamId = m.afkUsers[i];
+
+    m.afkUsers.forEach(function(streamId) {
         $("#"+sideStreamContent + streamId).addClass("blurred");
         $("#"+sideStreamContainer + streamId + " .smallStreamInfo").html(getStreamName(streamId) + " <i class=\"fa fa-coffee\" aria-hidden=\"true\"></i>");
-    }
+    });
 
 }
 
