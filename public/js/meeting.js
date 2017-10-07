@@ -1032,14 +1032,12 @@ $("#btn_infoModal").mouseup(function() {
 
 // Send a let me talk signal
 $("#btn_letmetalk").click( () => {
-        if(!m.afkUsers.includes(m.myPublisher.stream.streamId)){
-            signalTalkAction();
-        }else{
-            signalToggleAfk(m.myPublisher.stream.streamId);
-            signalTalkAction();
-        }
+    if(m.afkUsers.includes(m.myPublisher.stream.streamId)){
+        signalToggleAfk(m.myPublisher.stream.streamId);
     }
-);
+    signalTalkAction();
+});
+
 // remove focus from button after click
 $("#btn_letmetalk").mouseup(function() {
     $(this).blur();
