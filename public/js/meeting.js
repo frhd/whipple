@@ -1032,11 +1032,15 @@ $("#btn_infoModal").mouseup(function() {
 
 // Send a let me talk signal
 $("#btn_letmetalk").click( () => {
+    manageTalkAction();
+});
+
+function manageTalkAction(){
     if(m.afkUsers.includes(m.myPublisher.stream.streamId)){
         signalToggleAfk(m.myPublisher.stream.streamId);
     }
     signalTalkAction();
-});
+}
 
 // remove focus from button after click
 $("#btn_letmetalk").mouseup(function() {
@@ -1094,7 +1098,7 @@ document.body.onkeyup = function(e) {
     if (e.keyCode == 32) {
         // only if focus is not on the notes
         if (document.activeElement != document.getElementById('notes')) {
-            signalTalkAction();
+            manageTalkAction();
         }
     }
 }
