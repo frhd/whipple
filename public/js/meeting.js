@@ -132,7 +132,8 @@ m.superpowersLeft = m.config.superpowers;
 // timestamp synchronizing (difference to master in miliseconds)
 m.timeCorrection = 0;
 
-
+// keep track of afk users
+m.afkUsers = [];
 
 
 
@@ -245,7 +246,7 @@ function initializeSession() {
             insertMode: 'append',
             width: '100%',
             height: '100%',
-            fitMode: 'contain'
+            fitMode: 'cover'
 
         }, handleError);
 
@@ -253,6 +254,7 @@ function initializeSession() {
         if (m.amIMaster()) {
             console.log("Status update signaled because of new user");
             signalStatusUpdate(m.queue);
+            signalAfkUsersArray();
         }
 
         // play joining sound
@@ -304,7 +306,7 @@ function initializeSession() {
         insertMode: 'append',
         width: '100%',
         height: '100%',
-        fitMode: 'contain',
+        fitMode: 'cover',
         name: userName,
 
     });
@@ -460,6 +462,18 @@ function signalVisualizeLeaveQueue(_streamName) {
     });
 }
 
+function signalToggleAfk(_streamName) {
+    session.signal({
+        data: "toggleAfk#" + _streamName
+    });
+}
+
+function signalAfkUsersArray() {
+    session.signal({
+        data: "afkUsersArray#" + JSON.stringify(m.afkUsers)
+    });
+}
+
 
 
 // ##################################################################
@@ -529,6 +543,14 @@ function receiveSignal(event) {
             break;
         case "visualizeLeaveQueue":
             //handleVisualizeLeaveQueue(res[1]);
+            break;
+        case "toggleAfk":
+            var senderStreamId = res[1];
+            handleToggleAfk(senderStreamId);
+            break;
+        case "afkUsersArray":
+            var afkUsersArrayJSON = res[1];
+            handleAfkUsersArray(afkUsersArrayJSON);
             break;
         default:
             //log("ERROR: signaled command not found " + cmd);
@@ -767,12 +789,44 @@ function visualizeSuperpowerUse(senderStreamId, userQueuePosition) {
         blendOver("talkerPlaceholderContent", html, "name-overblend", getStreamName(senderStreamId).length + 3);
 
     }
+}
 
+
+function handleToggleAfk(senderStreamId){
+    // check if sender is already in afk array
+    if(!m.afkUsers.includes(senderStreamId)){
+        m.afkUsers.push(senderStreamId);
+        $("#"+sideStreamContent + senderStreamId).addClass("blurred");
+        $("#"+sideStreamContainer + senderStreamId + " .smallStreamInfo").html(getStreamName(senderStreamId) + " <i class=\"fa fa-coffee\" aria-hidden=\"true\"></i>");
+    }else{
+        var index = m.afkUsers.indexOf(senderStreamId);
+        if (index > -1) {
+            m.afkUsers.splice(index, 1);
+        }
+        $("#"+sideStreamContent + senderStreamId).removeClass("blurred");
+        $("#"+sideStreamContainer + senderStreamId + " .smallStreamInfo").html(getStreamName(senderStreamId));
+    }
+}
+
+// used when joining a session to get correct current afk status
+function initializeAfkUi(){
+
+    m.afkUsers.forEach(function(streamId) {
+        $("#"+sideStreamContent + streamId).addClass("blurred");
+        $("#"+sideStreamContainer + streamId + " .smallStreamInfo").html(getStreamName(streamId) + " <i class=\"fa fa-coffee\" aria-hidden=\"true\"></i>");
+    });
+
+}
+
+function handleAfkUsersArray(array){
+    console.log("got new afk array");
+    m.afkUsers = JSON.parse(array);
+    initializeAfkUi();
 }
 
 // general function for blending font based stuff in
 // if size is not set, it will fill the target (ToDO: implement custom sizing)
-function blendOver(targetId, _html, id, textLength) {
+function blendOver(targetId, _html, id, textLength, animate=true) {
     //console.log("blend over called");
     // delete possibly existing element
     $("#" + id).remove();
@@ -789,18 +843,18 @@ function blendOver(targetId, _html, id, textLength) {
     $("#" + id).css("top", center[1] - ($("#" + id).height() / 2));
     $("#" + id).css("position", "absolute");
 
-    $("#" + id).animate({
-        opacity: '1.0'
-    }, 2000);
-    $("#" + id).animate({
-        opacity: '0.0'
-    }, {
-        complete: function() {
-            $("#" + id).remove();
-        }
-    }, 2000);
-
-
+    if(animate){
+        $("#" + id).animate({
+            opacity: '1.0'
+        }, 2000);
+        $("#" + id).animate({
+            opacity: '0.0'
+        }, {
+            complete: function() {
+                $("#" + id).remove();
+            }
+        }, 2000);
+    }
 }
 
 // return the center coordinates for a html element
@@ -936,8 +990,6 @@ function updateUiTalkStatus(prevTalker, talksNow) {
     //$("#" + talkerContent).html($("#" + talkerElement).html());
 
 
-
-
 }
 
 // return stream object for a given streamId
@@ -979,7 +1031,17 @@ $("#btn_infoModal").mouseup(function() {
 
 
 // Send a let me talk signal
-$("#btn_letmetalk").click(signalTalkAction);
+$("#btn_letmetalk").click( () => {
+    manageTalkAction();
+});
+
+function manageTalkAction(){
+    if(m.afkUsers.includes(m.myPublisher.stream.streamId)){
+        signalToggleAfk(m.myPublisher.stream.streamId);
+    }
+    signalTalkAction();
+}
+
 // remove focus from button after click
 $("#btn_letmetalk").mouseup(function() {
     $(this).blur();
@@ -1036,7 +1098,7 @@ document.body.onkeyup = function(e) {
     if (e.keyCode == 32) {
         // only if focus is not on the notes
         if (document.activeElement != document.getElementById('notes')) {
-            signalTalkAction();
+            manageTalkAction();
         }
     }
 }
@@ -1126,6 +1188,16 @@ $("#btn_close_etherpad").click(function() {
 
 $("#show_etherpad").click(function() {
     $("#draggable-etherpad").css("display", "inline");
+});
+
+// AFK click events
+$("#toggle_afk").click(() => {
+    // if you are talking, stop and then send signal afk
+    if(m.myPublisher.stream.streamId == m.queue[0]){
+        signalTalkAction();
+    }
+    signalToggleAfk(m.myPublisher.streamId);
+
 });
 
 
