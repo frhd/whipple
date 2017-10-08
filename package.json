@@ -3,7 +3,6 @@
   "version": "0.1.1",
   "description": "managed voice-and video meetings",
   "repository": "git@github.com:whipple/whipple.git",
-  "homepage": "www.whipple.io",
   "engines": {
     "node": "6.11.1"
   },
