@@ -1,9 +1,13 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Route, withRouter } from "react-router";
+import { Route } from "react-router";
 import { Link } from "react-router-dom";
 
-class App extends PureComponent {
+export default class App extends Component {
+  componentWillMount() {
+    this.props.createSession();
+  }
+
   render() {
     return (
       <div className="App">
@@ -20,10 +24,6 @@ class App extends PureComponent {
   }
 }
 
-App.propTypes = {
-  tokBoxApiKey: PropTypes.string.isRequired,
-  tokBoxSecret: PropTypes.string.isRequired,
-  databaseUrl:  PropTypes.string.isRequired,
+App.propTyes = {
+  createSession: PropTypes.func.isRequired,
 };
-
-export default withRouter(App);
