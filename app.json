@@ -2,7 +2,7 @@
   "name": "managed voide- and video meetings",
   "description": "meetings as usual, just better",
   "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
-  "keywords": ["node", "express", "heroku"],
+  "keywords": ["node", "express", "heroku", "react", "redux"],
   "image": "heroku/nodejs",
   "buildpacks": [
     {
@@ -10,13 +10,13 @@
     }
   ],
   "env": {
-    "DATABASE_URL":{
+    "REACT_APP_DATABASE_URL": {
       "required": true
     },
-    "TOKBOX_API":{
+    "REACT_APP_TOKBOX_API": {
       "required": true
     },
-    "TOKBOX_SECRET":{
+    "REACT_APP_TOKBOX_SECRET": {
       "required": true
     }
   }

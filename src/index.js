@@ -14,9 +14,9 @@ import createBrowserHistory from "history/createBrowserHistory";
 
 const isDev = () => process.env.NODE_ENV !== "production";
 
-const TB_KEY = process.env.TOKBOX_API;
-const TB_SECRET = process.env.TOKBOX_SECRET;
-const DATABASE_URL = process.env.DATABASE_URL;
+const TB_KEY = process.env.REACT_APP_TOKBOX_API;
+const TB_SECRET = process.env.REACT_APP_TOKBOX_SECRET;
+const DATABASE_URL = process.env.REACT_APP_DATABASE_URL;
 
 const middleware = isDev() ?
   applyMiddleware(thunk, logger) :
