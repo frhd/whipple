@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./_container/App";
+import App from "./App";
 import { logger } from "redux-logger";
 import thunk from "redux-thunk";
 import { applyMiddleware, createStore } from "redux";
