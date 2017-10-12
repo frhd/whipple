@@ -21,6 +21,7 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         sessionId: action.payload.sessionId,
+        error: "",
       };
     default:
       return initialState;
