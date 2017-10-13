@@ -9,13 +9,15 @@
   "scripts": {
     "start-old": "node index.js",
     "test-old": "node test.js",
-    "start:server": "node server",
+    "server": "node server",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:9000",
   "dependencies": {
+    "@opentok/client": "^2.12.1",
     "body-parser": "^1.17.2",
     "classnames": "2.2.5",
     "clipboard": "^1.7.1",
@@ -37,6 +39,7 @@
     "redux-thunk": "2.2.0"
   },
   "devDependencies": {
+    "dotenv": "4.0.0",
     "eslint": "4.8.0",
     "eslint-config-dacz": "^0.13.3",
     "eslint-plugin-jest": "^21.2.0",
