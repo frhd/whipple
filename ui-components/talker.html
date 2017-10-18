@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>talker component</title>
+
+    <style>
+        .talker-ring {
+            height: 600px;
+            width: 600px;
+            z-index: 2;
+            /* this is just for testing and can be deleted in production*/
+            border-radius: 100%;
+            border:2px solid grey;
+            background-image: url("./assets/example-user.jpg");
+
+
+        }
+
+        .clip-circle {
+            clip-path: circle(302px at center);
+            /* OLD VALUE example: circle(245px, 140px, 50px); */
+            /* Yep, even the new clip-path has deprecated stuff. */
+        }
+
+        .talker-name-container{
+            width: 600px;
+            min-height: 50px;
+            line-height: 50px;
+            background-color: rgba(0,0,0,0.1);
+            position: relative;
+            top: 550px;
+            z-index: 100;
+            text-align: center;
+
+            color: #FFFFFF;
+            font-family: "Helvetica Neue", sans-serif;
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+
+    </style>
+
+</head>
+<body>
+    <div class="talker-ring clip-circle">
+        <div class="talker-name-container">
+            Username
+        </div>
+    </div>
+</body>
+</html>
