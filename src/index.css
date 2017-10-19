@@ -1,5 +1,10 @@
-body {
+html {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   font-family: sans-serif;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(160,160,160,0.3);
+  background: linear-gradient(-45deg, #7ED972 0%, #87328B 100%);
 }

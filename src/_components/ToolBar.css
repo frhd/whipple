@@ -2,9 +2,10 @@
   /* TODO flexible styles*/
   height: 560px;
   width: 80px;
-  /*delete in production*/
-  border: 1px solid grey;
   position: absolute;
   top: 170px;
-  left:50px;
+  left: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

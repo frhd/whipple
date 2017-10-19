@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import IconButton from "./IconButton";
-import "./ToolBarElement.css";
+import "./NavBarElement.css";
 
-export default class ToolBarElement extends Component {
+export default class NavBarElement extends Component {
   render() {
     return (
-      <div className="ToolBarElement">
+      <div className="NavBarElement">
         <IconButton icon={ this.props.icon } />
       </div>
     );
   }
 }
 
-ToolBarElement.propTypes = {
+NavBarElement.propTypes = {
   icon: PropTypes.string.isRequired,
 };

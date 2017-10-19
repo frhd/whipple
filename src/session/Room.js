@@ -5,7 +5,11 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import OT from "@opentok/client";
 import ToolBar from "../_components/ToolBar";
+import NavigationBar from "../_components/NavigationBar";
+import Logo from "../_components/Logo";
+import "./Room.css";
 
+// TODO make Redux Container
 export default class Room extends Component {
   constructor(props) {
     super(props);
@@ -18,12 +22,12 @@ export default class Room extends Component {
 
   render() {
     return (
-      <div>
+      <div className="Room">
         <h1>{ this.props.name } { this.props.match.params.name }</h1>
+        <Logo />
         <ToolBar />
-        <button onClick={ this.props.talk }>
-          I want to talk
-        </button>
+
+        <NavigationBar />
         <Link to="/">Go Home</Link>
       </div>
     );
