@@ -24,7 +24,7 @@ export class App extends Component {
         ) }
         />
         <Route
-          strict path="/room/:name"
+          path="/room/:name"
           component={ Room }
         />
       </div>
