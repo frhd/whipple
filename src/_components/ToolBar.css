@@ -1,0 +1,10 @@
+.ToolBar {
+  /* TODO flexible styles*/
+  height: 560px;
+  width: 80px;
+  /*delete in production*/
+  border: 1px solid grey;
+  position: absolute;
+  top: 170px;
+  left:50px;
+}

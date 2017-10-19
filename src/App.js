@@ -4,12 +4,13 @@ import { Route, withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import session from "./session";
-import OT from "@opentok/client";
+// import OT from "@opentok/client";
+import Room from "./session/Room";
 
 export class App extends Component {
   componentWillMount() {
-    this.props.createSession();
-    OT.initPublisher();
+    // this.props.createSession();
+    // OT.initPublisher();
   }
 
   render() {
@@ -23,13 +24,8 @@ export class App extends Component {
         ) }
         />
         <Route
-          strict path="/room/:roomName"
-          render={ ({ match }) => (
-            <div>
-              Room { match.params.roomName }
-              <Link to="/">Go Home</Link>
-            </div>)
-          }
+          strict path="/room/:name"
+          component={ Room }
         />
       </div>
     );

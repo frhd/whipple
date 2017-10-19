@@ -18,3 +18,13 @@ npm run server
 // start the client
 npm start
 ```
+
+### Simulate production
+
+```
+// build
+npm build
+
+// start server
+npm run server:prod
+```

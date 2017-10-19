@@ -1,4 +1,6 @@
 import * as type from "./actionTypes";
+import API from "../shared/constants";
+import fetch from "isomorphic-fetch";
 
 const sessionCreateRequest = () => ({
   type: type.SESSION_CREATE_REQUEST,
@@ -15,9 +17,10 @@ const sessionCreateFailed = (error) => ({
   payload: { error },
 });
 
-export const createSession = () => (dispatch) =>
+export const createSession = (name) => (dispatch) =>
   Promise.resolve()
     .then(() => dispatch(sessionCreateRequest()))
-    .then(() => fetch("/session/create"))
-    .then(({ sessionId }) => dispatch(sessionCreateSuccessful(sessionId)))
+    .then(() => fetch(`${API.SESSION_GET}/${name}`)
+      .then(response => response.json(), error => console.error("err", error))
+      .then(json => dispatch(sessionCreateSuccessful(json))))
     .catch(error => dispatch(sessionCreateFailed(error)));
