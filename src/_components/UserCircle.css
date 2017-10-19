@@ -4,6 +4,6 @@
   height: 500px !important;
   width: 500px !important;
   left: 50%;
-  margin-left: -250px;
+  margin-left: -250px !important;
   border: 5px solid;
 }
