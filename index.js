@@ -10,6 +10,8 @@ var socket = require('socket.io')
 var apiKey = process.env.TOKBOX_API;
 var apiSecret = process.env.TOKBOX_SECRET;
 
+
+
 // Initialize OpenTok
 var opentok = new OpenTok(apiKey, apiSecret);
 // needed for session geneeration to work directly after app restart
@@ -202,15 +204,18 @@ var server = app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
 });
 
+
 // Socket IO Code for handling meeting signals
+var io = socket(server);
 io.sockets.on('connection', function(socket) {
     // once a client has connected, we expect to get a ping from them saying what room they want to join
-    socket.on('room', function(room) {
-        console.log("a client joined room " + room);
-        socket.join(room);
-        //emit all meetingSignals to the corresponding room
-        socket.on('meetingSignal', function(data) {
-            io.sockets.in(room).emit('meetingSignal', data);
+    socket.on('sessionId', function(sessionId) {
+        console.log("a client joined session " + sessionId);
+        socket.join(sessionId);
+        //emit all signal to the corresponding room
+        socket.on('signal', function(data) {
+            console.log("Got signal: " +data)
+            io.sockets.in(sessionId).emit('signal', data);
         });
     });
 });

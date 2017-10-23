@@ -15,6 +15,9 @@ const btnAnalyticsDownload = "btn_analytics";
 
 const btnToggleVideo = 'btn_toggle_video';
 
+// socket for signaling over node js server
+let socket;
+
 
 
 // Audio Files
@@ -170,6 +173,8 @@ $(document).ready(function() {
 
 function initializeMeeting(){
 
+    // added for socket io signaling
+    initializeSocketIoSignaling();
     initializeSession();
     console.log("initialized");
 
@@ -216,6 +221,15 @@ function initializeMeeting(){
 
     // Disable Video Button if it's an audio only meeting
     //$("#" + btnToggleVideo).prop("disabled", true);
+}
+
+function initializeSocketIoSignaling(){
+    socket = io.connect();
+    // tell server to get messages for this sessionID
+    socket.on('connect', function() {
+        // Connected, let's sign-up for to receive messages for this room
+        socket.emit('sessionId', sessionId);
+    });
 }
 
 
@@ -361,117 +375,162 @@ function initializeSession() {
 
     session.connect(token, publishStream);
     // Which function to call if a signal is received
-    session.on("signal", receiveSignal);
+    // session.on("signal", receiveSignal);
+
+    // use sockets.io instead of the sessions signaling module
+    socket.on('signal', receiveSignal);
 
 
 }
 
 
-// Signals
+// Signals (session.signal has been replaced with socket ios socket.emit('signal', 'message');)
 // ############################################################################
 
 
 // Fired if you click the Let me talk Button
 function signalTalkAction() {
     console.log("You dispatched a signalLetMeTalk");
-    session.signal({
+    socket.emit("signal", "talkAction#" + m.myPublisher.stream.streamId);
+
+    /*session.signal({
         data: "talkAction#" + m.myPublisher.stream.streamId
     });
+    */
 }
 
 // This directly lets you talk for the given amount of time, independet of the queue
 function signalTalkActionManual(){
     console.log("You dispatched a signalLetMeTalkManual");
+    socket.emit("signal", "talkActionManual#" + m.myPublisher.stream.streamId + "#" + m.config.talkTimeAfterNewUserInQueue);
+    /*
     session.signal({
         data: "talkActionManual#" + m.myPublisher.stream.streamId + "#" + m.config.talkTimeAfterNewUserInQueue
     });
+    */
 }
 
 // Fired if you click the done talking button
 function signalDoneTalking() {
     //log("You dispatched a signalDoneTalking");
+    socket.emit("signal", "doneTalking#" + m.myPublisher.stream.streamId);
+    /*
     session.signal({
         data: "doneTalking#" + m.myPublisher.stream.streamId
     });
+    */
 }
 
 
 // Signal Agreement to something the talker just said
 function signalExpressAgreement() {
+    socket.emit("signal", "expressAgreement#" + m.myPublisher.stream.streamId);
+    /*
     session.signal({
         data: "expressAgreement#" + m.myPublisher.stream.streamId
     });
+    */
 }
 
 // Signal Disagreement to something the talker just said
 function signalExpressDisagreement() {
+    socket.emit("signal", "expressDisagreement#" + m.myPublisher.stream.streamId);
+    /*
     session.signal({
         data: "expressDisagreement#" + m.myPublisher.stream.streamId
     });
+    */
 }
 
 // Signal that teh speaker should get back on track
 function signalGetBackOnTrack() {
+    socket.emit("signal", "getBackOnTrack#");
+    /*
     session.signal({
         data: "getBackOnTrack#"
     });
+    */
 }
 
 // Signal status of current talkingQueue (used to inform new users on the status)
 // Only users with a empty Queue should react to this signal
 function signalQueueStatus() {
+    socket.emit("signal", "queueStatus#" + talksNow + "#" + JSON.stringify(talkingQueue));
+    /*
     session.signal({
         data: "queueStatus#" + talksNow + "#" + JSON.stringify(talkingQueue)
     });
+    */
 }
 
 // Signal that you want to leave the Queue if you are in it
 function signalLeaveQueue() {
     //log("You dispatched a signalLeaveQueue");
+    socket.emit("signal", "leaveQueue#" + m.myPublisher.stream.streamId);
+    /*
     session.signal({
         data: "leaveQueue#" + m.myPublisher.stream.streamId
     });
+    */
 }
 
 // Signal that you want want to use one superpower action
 function signalUseSuperpower() {
+    socket.emit("signal", "useSuperPower#" + m.myPublisher.stream.streamId);
+    /*
     session.signal({
         data: "useSuperPower#" + m.myPublisher.stream.streamId
     });
+    */
 }
 
 // Signal with the current meeting status
 function signalStatusUpdate(queue) {
     let currTime = Date.now();
     //console.log("statusUpdate#" + JSON.stringify(queue) + "#" + m.talkerEndTime);
+    socket.emit("signal", "statusUpdate#" + JSON.stringify(queue) + "#" + m.talkerEndTime + "#" + currTime);
+    /*
     session.signal({
         data: "statusUpdate#" + JSON.stringify(queue) + "#" + m.talkerEndTime + "#" + currTime
     });
+    */
 }
 
 // Visulaize Queue adding and leaving
 function signalVisualizeAddQueue(_streamName) {
+    socket.emit("signal", "visualizeAddQueue#" + _streamName);
+    /*
     session.signal({
         data: "visualizeAddQueue#" + _streamName
     });
+    */
 }
 
 function signalVisualizeLeaveQueue(_streamName) {
+    socket.emit("signal", "visualizeLeaveQueue#" + _streamName);
+    /*
     session.signal({
         data: "visualizeLeaveQueue#" + _streamName
     });
+    */
 }
 
 function signalToggleAfk(_streamName) {
+    socket.emit("signal", "toggleAfk#" + _streamName);
+    /*
     session.signal({
         data: "toggleAfk#" + _streamName
     });
+    */
 }
 
 function signalAfkUsersArray() {
+    socket.emit("signal", "afkUsersArray#" + JSON.stringify(m.afkUsers));
+    /*
     session.signal({
         data: "afkUsersArray#" + JSON.stringify(m.afkUsers)
     });
+    */
 }
 
 
@@ -479,7 +538,8 @@ function signalAfkUsersArray() {
 // ##################################################################
 // Processing Signals
 function receiveSignal(event) {
-    var res = event.data.split("#");
+    console.log("received signal over socket io " + event)
+    var res = event.split("#");
     var cmd = res[0];
 
     switch (cmd) {

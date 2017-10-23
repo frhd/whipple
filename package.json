@@ -17,7 +17,8 @@
     "ejs": "2.5.6",
     "express": "4.15.2",
     "opentok": "latest",
-    "pg": "6.x"
+    "pg": "6.x",
+    "socket.io": "^2.0.4"
   },
   "devDependencies": {
     "request": "^2.81.0",
