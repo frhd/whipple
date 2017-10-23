@@ -3,6 +3,7 @@ var app = express();
 var pg = require('pg');
 var bodyParser = require('body-parser');
 var OpenTok = require('opentok')
+var socket = require('socket.io')
 
 
 // set TokBox Api Key and secret
@@ -194,8 +195,22 @@ app.get('/meetings/:sessionId', function (req, res) {
 
 });
 
+
 // Actually start app
 // ############################################################################
-app.listen(app.get('port'), function () {
+var server = app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
+});
+
+// Socket IO Code for handling meeting signals
+io.sockets.on('connection', function(socket) {
+    // once a client has connected, we expect to get a ping from them saying what room they want to join
+    socket.on('room', function(room) {
+        console.log("a client joined room " + room);
+        socket.join(room);
+        //emit all meetingSignals to the corresponding room
+        socket.on('meetingSignal', function(data) {
+            io.sockets.in(room).emit('meetingSignal', data);
+        });
+    });
 });
