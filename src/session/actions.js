@@ -1,6 +1,7 @@
 import * as type from "./actionTypes";
 import API from "../shared/constants";
 import fetch from "isomorphic-fetch";
+import * as selector from "./selectors";
 
 const sessionCreateRequest = () => ({
   type: type.SESSION_CREATE_REQUEST,

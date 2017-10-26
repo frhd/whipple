@@ -23,6 +23,12 @@ export const reducer = (state = initialState, action) => {
         sessionId: action.payload.sessionId,
         error: "",
       };
+
+      case type.CLIENT_CAMERA_SWITCH:
+        return {
+            ...state,
+            cameraOn: !state.cameraOn,
+        };
     default:
       return initialState;
   }
