@@ -6,8 +6,9 @@ import "./NavBarElement.css";
 export default class NavBarElement extends Component {
   render() {
     return (
-      <div className="NavBarElement"
-          onClick={ this.props.onClick }
+      <div
+        className="NavBarElement"
+        onClick={ this.props.onClick }
       >
         <IconButton icon={ this.props.icon } />
       </div>
@@ -18,4 +19,8 @@ export default class NavBarElement extends Component {
 NavBarElement.propTypes = {
   icon: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+};
+
+NavBarElement.defaultProps = {
+  onClick: () => console.warn("undefined onClick"),
 };

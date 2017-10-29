@@ -28,4 +28,5 @@ ToolBar.propTypes = {
 };
 
 ToolBar.defaultProps = {
+  talkAction: () => console.log("fu talk"),
 };

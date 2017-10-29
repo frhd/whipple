@@ -1,1 +1,1 @@
-export const NAME = "client";
+export const NAME = "queue";

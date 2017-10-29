@@ -8,7 +8,7 @@ import videoOff from "../assets/ic_nav_video_off.svg";
 import endCall from "../assets/ic_nav_end_call.svg";
 import settings from "../assets/ic_nav_settings.svg";
 import { connect } from "react-redux";
-import { toggleCamera } from "../session/actions";
+import * as participantActions from "../participant/actions";
 
 // TODO make Redux Container
 class NavigationBar extends Component {
@@ -18,8 +18,8 @@ class NavigationBar extends Component {
         <NavBarElement icon={ endCall } />
         <NavBarElement icon={ addPerson } />
         <NavBarElement
-            icon={ videoOff }
-            onClick={ this.props.toggleCamera }
+          icon={ videoOff }
+          onClick={ this.props.toggleCamera }
         />
         <NavBarElement icon={ settings } />
         <NavBarElement icon={ info } />
@@ -35,12 +35,12 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    toggleCamera: () => dispatch(toggleCamera())
+  toggleCamera: () => dispatch(participantActions.toggleCamera()),
 });
 
 const NavBar = connect(
-    mapStateToProps,
-    mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps,
 )(NavigationBar);
 
-export NavBar;
+export default NavBar;

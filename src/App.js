@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 import { Route, withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import session from "./session";
+import room from "./room";
 // import OT from "@opentok/client";
-import Room from "./session/Room";
+import Room from "./room/Room";
 
 export class App extends Component {
   componentWillMount() {
-    // this.props.createSession();
+    // this.props.createRoom();
     // OT.initPublisher();
   }
 
@@ -33,17 +33,17 @@ export class App extends Component {
 }
 
 App.propTyes = {
-  createSession: PropTypes.func.isRequired,
+  createRoom: PropTypes.func.isRequired,
 };
 
 
 // selectors and constants
 const mapStateToProps = (state) => ({
-  sessionId: session.selectors.getSessionId(state),
+  roomId: room.selectors.getRoomId(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  createSession: () => dispatch(session.actions.createSession()),
+  createRoom: () => dispatch(room.actions.createRoom()),
 });
 
 const AppContainer = connect(

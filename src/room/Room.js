@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Route, withRouter, Redirect } from "react-router";
+import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import OT from "@opentok/client";
 import ToolBar from "../_components/ToolBar";
 import NavigationBar from "../_components/NavigationBar";
 import Logo from "../_components/Logo";
@@ -16,7 +14,7 @@ export default class Room extends Component {
     super(props);
     this.state = {
       err: null,
-    }
+    };
   }
 
   componentWillMount() {
