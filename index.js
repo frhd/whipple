@@ -5,6 +5,73 @@ var bodyParser = require('body-parser');
 var OpenTok = require('opentok')
 var socket = require('socket.io')
 
+//twilio
+/**
+ * Load Twilio configuration from .env config file - the following environment
+ * variables should be set:
+ * process.env.TWILIO_ACCOUNT_SID
+ * process.env.TWILIO_API_KEY
+ * process.env.TWILIO_API_SECRET
+ */
+require('dotenv').load();
+var accountSid = process.env.TWILIO_ACCOUNT_SID;
+var apiKeySid = process.env.TWILIO_API_KEY;
+var apiKeySecret = process.env.TWILIO_API_SECRET;
+//var Twilio = require('twilio');
+var AccessToken = require('twilio').jwt.AccessToken;
+var VideoGrant = AccessToken.VideoGrant;
+
+//var client = new Twilio(apiKeySid, apiKeySecret, {accountSid: accountSid});
+//console.log("created twilio client on server " + client);
+
+//create a test video room via twilio
+/*
+client.video.rooms
+    .create({
+        uniqueName: 'TestRoom',
+    })
+    .then(room => {
+    console.log(room.sid);
+});
+
+client.video.rooms('TestRoom').fetch()
+    .then((room) => {
+        console.log(room.sid);
+    });
+
+*/
+
+/**
+ * Generate an Access Token for a chat application user
+ * username consists of the given name plus current server-timestamp
+ * parameter.
+ */
+app.get('/token/:username', function(req, res) {
+    var identity = req.params.username + "#" + Date.now();
+    console.log("Identity created: " + identity);
+
+    // Create an access token which we will sign and return to the client,
+    // containing the grant we just created.
+    var token = new AccessToken(
+        process.env.TWILIO_ACCOUNT_SID,
+        process.env.TWILIO_API_KEY,
+        process.env.TWILIO_API_SECRET
+    );
+
+    // Assign the generated identity to the token.
+    token.identity = identity;
+
+    // Grant the access token Twilio Video capabilities.
+    var grant = new VideoGrant();
+    token.addGrant(grant);
+
+    // Serialize the token to a JWT string and include it in a JSON response.
+    res.send({
+        identity: identity,
+        token: token.toJwt()
+    });
+});
+
 
 // set TokBox Api Key and secret
 var apiKey = process.env.TOKBOX_API;
@@ -63,6 +130,17 @@ app.get('/', function (req, res) {
 app.get('/addmeeting', function (req, res) {
     res.render('pages/addmeeting');
 });
+
+// Twilio Test
+// Create new meeting Page
+app.get('/twilio', function (req, res) {
+    res.render('pages/twilio-test');
+});
+
+app.get('/twilio2', function (req, res) {
+    res.render('pages/twilio-test2');
+});
+
 
 // Add new meeting to the database
 app.post('/meetings', function (req, res) {
@@ -203,6 +281,7 @@ app.get('/meetings/:sessionId', function (req, res) {
 var server = app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
 });
+
 
 
 // Socket IO Code for handling meeting signals

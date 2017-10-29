@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Twilio Video - Video Quickstart</title>
+
+    <link rel="stylesheet" href="/css/twilio-test.css">
+</head>
+<body>
+<div id="remote-media"></div>
+<div id="controls">
+    <div id="preview">
+        <p class="instructions">Hello Beautiful</p>
+        <div id="local-media"></div>
+        <button id="button-preview">Preview My Camera</button>
+    </div>
+    <div id="room-controls">
+        <p class="instructions">Room Name:</p>
+        <input id="room-name" type="text" placeholder="Enter a room name" />
+        <button id="button-join">Join Room</button>
+        <button id="button-leave">Leave Room</button>
+    </div>
+    <div id="log"></div>
+</div>
+
+<%include ../partials/footer.ejs %>
+<script src="//media.twiliocdn.com/sdk/js/video/v1/twilio-video.min.js"></script>
+<script src="/js/twilio-test.js"></script>
+</body>
+</html>
