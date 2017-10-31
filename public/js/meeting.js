@@ -158,7 +158,8 @@ $(document).ready(function() {
                 swal.showInputError("You need to enter a name");
                 return false
             }
-            userName = inputValue;
+            // remove special characters
+            userName = inputValue.replace(/[^\w\s]/gi, '');
 
             // initialize meeting
             initializeMeeting();
