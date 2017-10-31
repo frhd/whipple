@@ -42,11 +42,11 @@ client.video.rooms('TestRoom').fetch()
 */
 
 /**
- * Generate an Access Token for a chat application user
+ * Generate an Access Token for a video chat application user
  * username consists of the given name plus current server-timestamp
  * parameter.
  */
-app.get('/token/:username', function(req, res) {
+app.get('/twilio-token/:username', function(req, res) {
     var identity = req.params.username + "#" + Date.now();
     console.log("Identity created: " + identity);
 
