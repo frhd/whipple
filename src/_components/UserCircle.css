@@ -1,9 +1,0 @@
-.UserCircle {
-  /*TODO flexible styles*/
-  border-radius: 50%;
-  height: 500px !important;
-  width: 500px !important;
-  left: 50%;
-  margin-left: -250px !important;
-  border: 5px solid;
-}

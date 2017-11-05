@@ -1,17 +1,27 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import "./IconButton.css";
+import classNames from "classnames";
+import injectStyles from "react-jss";
 
-export default class IconButton extends Component {
-  render() {
-    return (
-      <div className="IconButton">
-        <img src={ this.props.icon } />
-      </div>
-    );
-  }
-}
+const IconButton = ({ classes, className, icon }) => (
+  <div className={ classNames(classes.root, className) } >
+    <img src={ icon } alt="icon" />
+  </div>
+);
 
 IconButton.propTypes = {
   icon: PropTypes.string.isRequired,
+  classes: PropTypes.object.isRequired,
+  className: PropTypes.object,
 };
+
+const styles = {
+  root: {
+    height: "100%",
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-around",
+  },
+};
+
+export default injectStyles(styles)(IconButton);

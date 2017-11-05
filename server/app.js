@@ -98,7 +98,11 @@ app.post(`${API.SESSION_CREATE}`, (req, res) => {
           .then(sessionId => res.json({ sessionId }))
           .catch(error => res.status(500).json({ error }));
       } else {
-        res.status(500).json({ error: "room_not_created" });
+        // res.status(500).json({ error: "room_not_created" });
+        // returning the existing sessionId for now
+        findRoomByName(sessionName)
+          .then(room => res.json({ sessionId: room.session_id }))
+          .catch(error => res.status(500).json({ error }));
       }
     }).catch(error => res.status(500).json({ error }));
 });
@@ -127,6 +131,7 @@ app.get(`${API.SESSION_GET}/:name`, (req, res) => {
   });
 });
 
+// todo add sessionId?
 app.post(`${API.ROOM_JOIN}/`, (request, response) => {
   const name = request.body.name;
   findRoomByName(name)
