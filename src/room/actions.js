@@ -4,6 +4,8 @@ export const SIGNAL_THUMBS_UP = "THUMBS_UP";
 export const SIGNAL_THUMBS_DOWN = "THUMBS_DOWN";
 export const SIGNAL_TIME_BOOST = "TIME_BOOST";
 export const SIGNAL_AFK = "AFK";
+export const SIGNAL_QUEUE_UPDATE = "QUEUE_UPDATE";
+export const SIGNAL_USER_JOINED = "USER_JOINED";
 
 export const createRoom = (name) => (
   new Promise((resolve, reject) => {
@@ -39,7 +41,7 @@ export const joinRoom = (name) => (
       .catch(err => reject(err));
   }));
 
-export const signalQueueJoin = (session, streamId) => {
+export const signalTalk = (session, streamId) => {
   console.log("signaling talk action", streamId);
   session.signal({
     data: streamId,
@@ -79,6 +81,13 @@ export const signalAfk = (session, streamId) => {
 export const signalUserJoined = (session, streamId) => {
   session.signal({
     data: streamId,
-    type: "USER_JOINED",
+    type: SIGNAL_USER_JOINED,
+  });
+};
+
+export const signalQueueUpdate = (session, queue, target) => {
+  session.signal({
+    data: queue,
+    type: SIGNAL_QUEUE_UPDATE,
   });
 };

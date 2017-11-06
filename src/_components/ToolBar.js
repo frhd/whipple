@@ -10,7 +10,7 @@ import injectStyles from "react-jss";
 import classNames from "classnames";
 
 import {
-  signalQueueJoin,
+  signalTalk,
   signalThumbsUp,
   signalThumbsDown,
   signalTimeBoost,
@@ -30,7 +30,7 @@ const ToolBar = ({
   // afkAction,
 }) => {
   const elements = [
-    { icon: finger, onClick: () => signalQueueJoin(session, streamId) },
+    { icon: finger, onClick: () => signalTalk(session, streamId) },
     { icon: thumbsUp, onClick: () => signalThumbsUp(session, streamId) },
     { icon: thumbsDown, onClick: () => signalThumbsDown(session, streamId) },
     { icon: timeBoost, onClick: () => signalTimeBoost(session, streamId) },

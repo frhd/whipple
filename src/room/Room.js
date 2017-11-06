@@ -17,7 +17,7 @@ class Room extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      me:       "",
+      me:       {},
       userName: "Jasper",
       users:    [],
       roomId:   "",
@@ -37,10 +37,14 @@ class Room extends Component {
         this.setState({ connected: true, session: s.target });
       },
       sessionDisconnected: () => {
+        this.state.session.signal({ type: "DISCONNECT", data: this.state.me.stream.id });
         this.setState({ connected: false, session: {} });
       },
       streamCreated: (e) => {
         this.onStreamCreated(e);
+      },
+      streamDestroyed: (e) => {
+        this.onStreamDestroyed(e);
       },
       signal: (signal) => {
         this.receiveSignal(signal);
@@ -60,26 +64,55 @@ class Room extends Component {
   }
 
   onStreamCreated(event) {
-    this.setState({
-      users: [...this.state.users, event.stream],
+    this.setState((prevState) => ({
+      users: [
+        ...prevState.users,
+        { stream: event.stream, joinedAt: new Date() },
+      ],
+    }));
+  }
+
+  onStreamDestroyed(event) {
+    const stream = event.stream;
+    this.setState((prevState) => {
+      const index =
+        prevState.users.findIndex((user) => (user.stream.id === stream.id));
+      prevState.users.splice(index, 1);
+      prevState.queue.splice(prevState.queue.indexOf(stream.id), 1);
+      return {
+        users: prevState.users,
+        queue: prevState.queue,
+      };
     });
+    if (this.isMaster()) {
+      const { session, queue } = this.state;
+      actions.signalQueueUpdate(session, JSON.stringify(queue));
+    }
   }
 
   onPublisherCreated(event) {
-    this.setState({ me: event.stream.id });
+    this.setState({ me: { stream: event.stream, joinedAt: new Date() } });
     actions.signalUserJoined(this.state.session, event.stream.id);
   }
 
-  onTalkActionReceived(user) {
+  onTalkActionReceived(userId) {
     const queue = this.state.queue;
-    const index = queue.indexOf(user);
+    const index = queue.indexOf(userId);
     if (index > -1) {
       queue.splice(index, 1);
       this.setState({ queue });
     } else {
       this.setState({
-        queue: [...queue, user],
+        queue: [...queue, userId],
       });
+    }
+  }
+
+  onUserJoinedReceived(userId, asMaster) {
+    const { queue, session } = this.state;
+    if (asMaster) {
+      console.log("sending queue update to joined user", userId);
+      actions.signalQueueUpdate(session, JSON.stringify(queue), userId);
     }
   }
 
@@ -87,10 +120,29 @@ class Room extends Component {
     this.setState(prevState => ({ video: !prevState.video }));
   }
 
+  isMaster() {
+    const { me, users } = this.state;
+    const participants = [me, ...users];
+    const usersByJoinedDate =
+      participants.sort((a, b) => (a.joinedAt - b.joinedAt));
+    const master = usersByJoinedDate[0];
+    const asMaster = master.stream && me.stream.id === master.stream.id;
+    return asMaster;
+  }
+
   receiveSignal(signal) {
+    console.log("MASTER?", this.isMaster());
+    const asMaster = this.isMaster();
     switch (signal.type) {
       case "signal:TALK":
-        this.onTalkActionReceived(signal.data);
+        this.onTalkActionReceived(signal.data, asMaster);
+        break;
+      case `signal:${actions.SIGNAL_USER_JOINED}`:
+        this.onUserJoinedReceived(signal.data, asMaster);
+        break;
+      case `signal:${actions.SIGNAL_QUEUE_UPDATE}`:
+        console.log("updating queue from", this.state.queue, "to", JSON.parse(signal.data));
+        this.setState({ queue: JSON.parse(signal.data) });
         break;
       default:
         console.warn("Signal received, but no action defined for", signal.type);
@@ -98,13 +150,24 @@ class Room extends Component {
     }
   }
 
+  speaker() {
+    const { users, queue, me } = this.state;
+    const speakerId = queue[0];
+    const all = [me, ...users];
+    const r = all.find((u) => (u.stream && u.stream.id === speakerId));
+    return r ? r.stream : r;
+  }
+
   render() {
     const { roomId, token, me, video, audio, queue, connected } = this.state;
     const { classes } = this.props;
+    const myStreamId = me.stream ? me.stream.id : undefined;
+
+    const speaker = this.speaker();
+    console.log("speaker", speaker, "me", myStreamId);
     return (
       <div className={ classes.room }>
         <Logo />
-        <p>{ queue }</p>
         {token &&
           <OTSession
             apiKey={ process.env.REACT_APP_TOKBOX_API }
@@ -112,6 +175,8 @@ class Room extends Component {
             token={ token }
             eventHandlers={ this.sessionEvents }
           >
+            <p>{ queue }</p>
+            <p>speaker: { speaker && speaker.name }</p>
             <h1>{ this.props.match.params.name }</h1>
             <Participants
               audio={ audio }
@@ -119,14 +184,15 @@ class Room extends Component {
               clientName={ this.state.userName }
               className={ classes.participants }
               onPublisherCreated={ this.onPublisherCreated }
+              streams={ this.state.users.map(user => user.stream) }
             />
             <NavigationBar
-              streamId={ me }
+              streamId={ myStreamId }
               toggleVideo={ this.toggleVideo }
               disabled={ !connected }
             />
             <ToolBar
-              streamId={ me }
+              streamId={ myStreamId }
               disabled={ !connected }
             />
           </OTSession>
