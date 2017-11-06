@@ -54,6 +54,12 @@ let prevTalker;
 // used for managing talk time warning messages (could be solved nicer)
 let alreadyWarnedAt;
 
+// Twilio
+const Video = Twilio.Video;
+let sessionId;
+let testTrack;
+let myParticipant;
+let _room;
 
 
 
@@ -76,7 +82,11 @@ class Meeting {
     addUser(stream) {
         this.users.push(stream);
         this.users = this.users.sort(function(a, b) {
-            return (a.creationTime - b.creationTime);
+            let time_a = a.identity.split("#")[1];
+            let time_b = b.identity.split("#")[1];
+            a.creation_time = time_a;
+            b.creation_time = time_b;
+            return (a.creation_time - b.creation_time);
         });
 
     }
@@ -96,14 +106,14 @@ class Meeting {
 
 
     getMaster() {
-        return this.getUsers()[0];
+        return this.getUsers()[0].sid;
     }
 
     amIMaster() {
         if (!this.myPublisher) {
             return false;
         } else {
-            return (this.getMaster() == this.myPublisher.stream);
+            return (this.getMaster() == this.myPublisher);
         }
     }
 }
@@ -164,12 +174,116 @@ $(document).ready(function() {
             userName = inputValue;
 
             // initialize meeting
-            initializeMeeting();
+            // initializeMeeting();
+
+            // Initilize Twilio based meeting
+            initializeMeetingTwilio();
 
         });
 
 
 });
+
+function initializeMeetingTwilio(){
+    console.log("initializing meeting the twilio way...")
+    // $('.btn-group button').attr('disabled', true);
+    // Obtain a token from the server in order to connect to the Room.
+    $.getJSON('/twilio-token/'+userName, function(data) {
+        token = data.token;
+
+        Video.connect(token, { name: 'otherRoom' }).then(room => {
+            _room = room;
+            console.log('Connected to Room "%s"', room.name);
+
+            // use twilio room sid as sessionId
+            sessionId = room.sid;
+
+            // add yourself to the ui
+            participantConnected(room.localParticipant, you=true);
+            console.log("local participant " +room.localParticipant.sid)
+            myParticipant = room.localParticipant;
+            m.myPublisher = myParticipant.sid;
+
+            // disable audio publishing
+            participantAudio();
+
+
+            room.participants.forEach(participantConnected);
+            room.on('participantConnected', participantConnected);
+
+            room.on('participantDisconnected', participantDisconnected);
+            room.once('disconnected', error => room.participants.forEach(participantDisconnected));
+        });
+
+
+
+    });
+
+    // added for socket io signaling
+    initializeSocketIoSignaling();
+    // use sockets.io instead of the sessions signaling module
+    socket.on('signal', receiveSignal);
+}
+
+// Twilio functions
+function participantConnected(participant, you=false) {
+    console.log('Participant "%s" connected', participant.identity);
+
+    // save user with his twilio identity
+    // get local videotrack _room.localParticipant.videoTracks.values().next().value
+    m.addUser(participant);
+    addTwilioStreamToHTML(participant, you);
+
+    /*
+    const div = document.createElement('div');
+    div.id = participant.sid;
+    div.innerText = participant.identity;
+    */
+
+    // participant.on('trackAdded', track => trackAdded(div, track));
+    // participant.tracks.forEach(track => trackAdded(div, track));
+    // participant.on('trackRemoved', trackRemoved);
+
+    //document.body.appendChild(div);
+}
+
+function participantDisconnected(participant) {
+    console.log('Participant "%s" disconnected', participant.identity);
+    m.removeUser(participant)
+    participant.tracks.forEach(trackRemoved);
+    document.getElementById("SideStreamContainer"+participant.sid).remove();
+}
+
+function trackAdded(div, track) {
+    if(typeof track !== 'undefined'){
+        //track.dimensions.height = 20;
+        //track.dimensions.width = 20;
+        //let testTrack = track;
+        //console.log("track dimensions height " + track.dimensions)
+        //console.log("track dimensions width " + track.dimensions)
+        div.appendChild(track.attach());
+        //div.append(track.attach());
+        //div.innerHTML(track.attach);
+    }
+}
+
+function trackRemoved(track) {
+    track.detach().forEach(element => element.remove());
+}
+
+// wrapper for turning audio publsihing on or off
+
+function participantAudio(participant = _room.localParticipant, publish = false){
+    console.log("Participant Audio was called for " + participant + " with "+  publish);
+    if(publish == true){
+        participant.audioTracks.values().next().value.enable();
+
+    }else{
+        participant.audioTracks.values().next().value.disable();
+    }
+}
+
+// End Twilio function ########################################################
 
 function initializeMeeting(){
 
@@ -391,7 +505,7 @@ function initializeSession() {
 // Fired if you click the Let me talk Button
 function signalTalkAction() {
     console.log("You dispatched a signalLetMeTalk");
-    socket.emit("signal", "talkAction#" + m.myPublisher.stream.streamId);
+    socket.emit("signal", "talkAction#" + m.myPublisher);
 
     /*session.signal({
         data: "talkAction#" + m.myPublisher.stream.streamId
@@ -733,7 +847,7 @@ function handleStatusUpdate(_queueJSON, _talkerEndTime, _masterTime) {
     console.log("User Name Queue");
     console.log(userNameQueue);
 
-    let myId = m.myPublisher.stream.streamId
+    let myId = m.myPublisher
         /*
         console.log("talksNow");
         console.log(talksNow);
@@ -750,12 +864,16 @@ function handleStatusUpdate(_queueJSON, _talkerEndTime, _masterTime) {
     if (talksNow == myId && prevTalker != myId) {
         // create timestamp to known when your talking started
         m.talkerStartedAt = Date.now();
-        m.myPublisher.publishAudio(true)
+        //m.myPublisher.publishAudio(true)
+        // twilio
+        participantAudio(_room.localParticipant, true);
             // warn user that its his turn now (via audio)
             //console.log("talkingSound")
         talkingSound.play();
     } else if (prevTalker == myId && talksNow != myId) {
-        m.myPublisher.publishAudio(false);
+        // m.myPublisher.publishAudio(false);
+        // twilio
+        participantAudio(_room.localParticipant, false);
         doneTalkingSound.play();
         // reset global variable for managing talk time warnings
         alreadyWarnedAt = null;
@@ -943,11 +1061,11 @@ function getUserNameQueue() {
 
 
 // get Stream Name for given Stream ID
-function getStreamName(streamId) {
+function getStreamName(sid) {
     let index;
     for (index = 0; index < m.getUsers().length; ++index) {
-        if (m.getUsers()[index].streamId == streamId) {
-            return m.getUsers()[index].name;
+        if (m.getUsers()[index].sid == sid) {
+            return m.getUsers()[index].identity.split("#")[0];
         }
     }
 }
@@ -996,7 +1114,14 @@ function updateUiTalkStatus(prevTalker, talksNow) {
     // if there is a prev talker, move his stream back to the sidePanel
     if (prevTalker != null && prevTalker != "null") {
         console.log("moving back prevTaler Stream to sidePanel");
+        // $("#" + sideStreamContent + prevTalker).html($("#" + talkerContent).children("div:first"));
+        // twilio version
         $("#" + sideStreamContent + prevTalker).html($("#" + talkerContent).children("div:first"));
+
+        // manually tell the video to play again
+        // get(0) gets native dom element of jquery selection
+        $("#" + sideStreamContent + prevTalker + " video").get(0).play();
+        $("#" + sideStreamContent + prevTalker + " audio").get(0).play();
     }
 
 
@@ -1028,8 +1153,16 @@ function updateUiTalkStatus(prevTalker, talksNow) {
 
         // new version: move the exisiting stream to the middle and back if the talking is over
         // like this: $("#talkerPlaceholderContent").html($("#"+"OT_bc800252-fa1a-4485-a358-54e10a3da243"))
+        //$("#" + talkerContent).html($("#" + sideStreamContent + m.queue[0]).children("div:first"));
+        // twilio change
         $("#" + talkerContent).html($("#" + sideStreamContent + m.queue[0]).children("div:first"));
         $("#" + sideStreamContent + m.queue[0]).html(`<i class="fa fa-user-circle-o fa-5x"></i>`);
+
+        // manually tell the video and audio to play again
+        // get(0) gets native dom element of jquery selection
+        $("#" + talkerContent + " video").get(0).play();
+        $("#" + talkerContent + " audio").get(0).play();
+
 
     }
 
@@ -1068,6 +1201,7 @@ function getStreamFromId(streamId) {
 // ############################################################################
 
 // Toogle Video for own Stream
+/*
 $("#btn_toggle_video").click(function() {
     if (m.myPublisher.stream.hasVideo) {
         //log(myPublisher.stream.name + "  disabled Video", true);
@@ -1076,6 +1210,17 @@ $("#btn_toggle_video").click(function() {
         //log(myPublisher.stream.name + "  enabled Video", true);
         m.myPublisher.publishVideo(true);
     }
+});
+*/
+
+// twilio version
+$("#btn_toggle_video").click(function() {
+    if(myParticipant.videoTracks.values().next().value.isEnabled){
+        myParticipant.videoTracks.values().next().value.disable();
+    }else{
+        myParticipant.videoTracks.values().next().value.enable();
+    }
+
 });
 
 // remove focus from button after click
@@ -1096,8 +1241,8 @@ $("#btn_letmetalk").click( () => {
 });
 
 function manageTalkAction(){
-    if(m.afkUsers.includes(m.myPublisher.stream.streamId)){
-        signalToggleAfk(m.myPublisher.stream.streamId);
+    if(m.afkUsers.includes(m.myPublisher)){
+        signalToggleAfk(m.myPublisher);
     }
     signalTalkAction();
 }
@@ -1287,7 +1432,7 @@ function uiTimeToEnd() {
         }
 
         // if you are the talker, show reminders on how long you are already talking
-        if (m.queue[0] == m.myPublisher.stream.streamId) {
+        if (m.queue[0] == m.myPublisher) {
             let talkedFor = Math.floor((Date.now() - m.talkerStartedAt)/1000);
             if(talkedFor % m.config.youTalkedForMessageInterval == 0 && talkedFor > 0){
                 // make sure warning is only showed once per timestamp
@@ -1311,7 +1456,7 @@ function uiTimeToEnd() {
         if (secondsLeft <= 0) {
             $("#" + talkTimeLeftUi).html(`<i class="fa fa-hourglass" aria-hidden="true"></i>`);
             // if you are the talker, stop now
-            if (m.queue[0] == m.myPublisher.stream.streamId) {
+            if (m.queue[0] == m.myPublisher) {
 
                 // only stop talking if there is someone in the queue, else keep talking
                 if(m.queue.length > 1){
@@ -1374,5 +1519,50 @@ function addStreamToHTML(streamId, streamName, you) {
     `
         // Insert html to Stream Area
     $(leftPanel).append(template);
+
+}
+
+function addTwilioStreamToHTML(participant, you=false){
+    // if video is already in html, return
+    if($("#SideStreamContent"+participant.sid).length > 0) {
+        console.log("Video already in html for " + participant.sid);
+        return;
+    }
+
+    console.log("Adding twilio participant to html " + participant.identity);
+    let extraClass = "";
+    if (you == true) {
+        extraClass = "streamYou";
+    }
+
+
+    const template =
+        `
+                <div id="SideStreamContainer${participant.sid}" class="smallStreamContainer">
+                <div id="SideStreamContent${participant.sid}" class="smallStreamContent aligner">
+                   <div>
+                   
+                    </div>
+                </div>
+
+                <div class="smallStreamInfo ${extraClass}">
+                    <!--<hr>-->
+                    ${participant.identity.split("#")[0]}
+                    <span class="smallStreamQueueUi"></span>
+                </div>
+            </div>
+    `
+
+    // Insert html to Stream Area
+    $(leftPanel).append(template);
+
+    // twilio specific
+    // let div = $("#SideStreamContent"+participant.sid);
+    // let div = document.getElementById("SideStreamContent"+participant.sid);
+    let div = $("#SideStreamContent"+participant.sid +" div").get(0);
+    //console.log(div)
+    participant.on('trackAdded', track => trackAdded(div, track));
+    participant.tracks.forEach(track => trackAdded(div, track));
+    participant.on('trackRemoved', trackRemoved);
 
 }
