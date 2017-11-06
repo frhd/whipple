@@ -191,7 +191,7 @@ function initializeMeetingTwilio(){
     $.getJSON('/twilio-token/'+userName, function(data) {
         token = data.token;
 
-        Video.connect(token, { name: 'otherRoom' }).then(room => {
+        Video.connect(token, { name: sessionName }).then(room => {
             _room = room;
             console.log('Connected to Room "%s"', room.name);
 
