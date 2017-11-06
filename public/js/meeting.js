@@ -590,7 +590,7 @@ function signalLeaveQueue() {
 
 // Signal that you want want to use one superpower action
 function signalUseSuperpower() {
-    socket.emit("signal", "useSuperPower#" + m.myPublisher.stream.streamId);
+    socket.emit("signal", "useSuperPower#" + m.myPublisher);
     /*
     session.signal({
         data: "useSuperPower#" + m.myPublisher.stream.streamId
@@ -1256,7 +1256,7 @@ $("#btn_superpower").click(function() {
     if (m.config.superpowers > 0) {
 
         // ToDo: if own position is worse than 2
-        if (m.queue[0] == m.myPublisher.stream.streamId || m.queue.indexOf(m.myPublisher.stream.streamId) > 1) {
+        if (m.queue[0] == m.myPublisher || m.queue.indexOf(m.myPublisher) > 1) {
             // use up one superpower
             m.config.superpowers -= 1;
             // display left superpower
