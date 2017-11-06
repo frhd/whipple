@@ -249,7 +249,17 @@ function participantConnected(participant, you=false) {
 
 function participantDisconnected(participant) {
     console.log('Participant "%s" disconnected', participant.identity);
-    m.removeUser(participant)
+    m.removeUser(participant);
+
+    // clean user from queue
+    if (m.amIMaster()) {
+        console.log("Master caught user leaving");
+        if (m.queue.indexOf(participant.sid) != -1) {
+            // leave queue clean
+            handleTalkAction(participant.sid);
+        }
+    }
+
     participant.tracks.forEach(trackRemoved);
     document.getElementById("SideStreamContainer"+participant.sid).remove();
 }
@@ -538,7 +548,7 @@ function signalDoneTalking() {
 
 // Signal Agreement to something the talker just said
 function signalExpressAgreement() {
-    socket.emit("signal", "expressAgreement#" + m.myPublisher.stream.streamId);
+    socket.emit("signal", "expressAgreement#" + m.myPublisher);
     /*
     session.signal({
         data: "expressAgreement#" + m.myPublisher.stream.streamId
@@ -548,7 +558,7 @@ function signalExpressAgreement() {
 
 // Signal Disagreement to something the talker just said
 function signalExpressDisagreement() {
-    socket.emit("signal", "expressDisagreement#" + m.myPublisher.stream.streamId);
+    socket.emit("signal", "expressDisagreement#" + m.myPublisher);
     /*
     session.signal({
         data: "expressDisagreement#" + m.myPublisher.stream.streamId
@@ -1120,8 +1130,13 @@ function updateUiTalkStatus(prevTalker, talksNow) {
 
         // manually tell the video to play again
         // get(0) gets native dom element of jquery selection
-        $("#" + sideStreamContent + prevTalker + " video").get(0).play();
-        $("#" + sideStreamContent + prevTalker + " audio").get(0).play();
+        try{
+            $("#" + sideStreamContent + prevTalker + " video").get(0).play();
+            $("#" + sideStreamContent + prevTalker + " audio").get(0).play();
+        }catch(err){
+
+        }
+
     }
 
 
@@ -1160,8 +1175,13 @@ function updateUiTalkStatus(prevTalker, talksNow) {
 
         // manually tell the video and audio to play again
         // get(0) gets native dom element of jquery selection
-        $("#" + talkerContent + " video").get(0).play();
-        $("#" + talkerContent + " audio").get(0).play();
+        try{
+            $("#" + talkerContent + " video").get(0).play();
+            $("#" + talkerContent + " audio").get(0).play();
+        }catch(err){
+
+        }
+
 
 
     }
@@ -1398,10 +1418,10 @@ $("#show_etherpad").click(function() {
 // AFK click events
 $("#toggle_afk").click(() => {
     // if you are talking, stop and then send signal afk
-    if(m.myPublisher.stream.streamId == m.queue[0]){
+    if(m.myPublisher == m.queue[0]){
         signalTalkAction();
     }
-    signalToggleAfk(m.myPublisher.streamId);
+    signalToggleAfk(m.myPublisher);
 
 });
 
