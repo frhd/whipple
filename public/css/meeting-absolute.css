@@ -18,6 +18,11 @@ body{
     font-family: Ubuntu, sans-serif;
 }
 
+video{
+    width: 100%;
+    heigth: 100%;
+}
+
 .badge-warning {
     background-color: #ec008c;
 }
@@ -219,7 +224,7 @@ body{
 }
 
 .streamYou{
-    /* font-weight: bold; */
+     font-weight: bold;
     font-family: Ubuntu, sans-serif;
     color: #92278f;
 }

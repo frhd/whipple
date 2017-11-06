@@ -176,6 +176,7 @@ app.post('/meetings', function (req, res) {
 // A simpler way to create and join a meeting
 // just a roomname is is needed (via url). The session is than created if it not already existed
 // The user name is asked when the user enters the meeting
+/*
 app.get('/room/:roomName', function (req, res) {
     // filter special characters
     const roomName = req.params.roomName.replace(/[^\w\s]/gi, '');
@@ -201,6 +202,23 @@ app.get('/room/:roomName', function (req, res) {
             }
         });
     });
+});
+*/
+
+// Twilio replacement for creating and joining a room
+app.get('/room/:roomName', function (req, res) {
+
+    const roomName = req.params.roomName.replace(/[^\w\s]/gi, '');
+
+    res.render('pages/meeting', {
+        sessionName: roomName
+        //sessionId: sessionId,
+        //userName: userName,
+        //audioOnly: audioOnly,
+        //token: token,
+        //apiKey: apiKey
+    });
+
 });
 
 // creates a room with a given name

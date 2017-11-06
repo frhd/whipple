@@ -7,12 +7,9 @@
         <link rel="stylesheet" type="text/css" href="/css/meeting-absolute.css" />
         <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
         <script type="text/javascript">
-            var apiKey = '<%= apiKey %>';
-                    var sessionId = '<%= sessionId %>';
-                    var sessionName = '<%= sessionName %>';
-                    var token = '<%= token %>';
-                    var userName = '<%= userName %>';
-                    var audioOnly = '<%= audioOnly %>';
+
+            var sessionName = '<%= sessionName %>';
+
         </script>
 </head>
 
@@ -322,6 +319,7 @@
 
     <% include ../partials/footer.ejs %>
     <script src="/js/absoluteCorrections.js"></script>
+    <script src="//media.twiliocdn.com/sdk/js/video/v1/twilio-video.min.js"></script>
     <script src="/js/meeting.js" ></script>
     <script src="/js/sound-learn.js" ></script>
 
